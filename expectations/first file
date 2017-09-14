@@ -1,0 +1,36 @@
+dba.stackexchange.com/questions/1043/
+
+a link of A user:
+	hasMany		tags		given
+	hasMany		projects	given
+	hasMany		comments	given, may be difficult to derive/extract so manual interference needed
+	hasOne		website 	derived
+	hasOne		is_porn		derived, can be set by user
+	hasMany		*system		derived once per session, realtime, may be faulty
+	hasMany		*location	derived, realtime, may be seriously faulty
+	hasMany		*timestamp	derived, realtime, 
+
+interfaces
+	import
+	home page (overview, as in-- x organized, y pending, z errors)
+	viewer
+	organizer
+	custom editor
+	(inbuilt) searcher
+		q(#)
+		q(@)
+		q(words of comment and/or title and/or url)
+
+
+future-- realtime ``tag suggestor`` based on title, comments
+
+-------------------------------------------
+
+files
+
+
+
+same project can have many nick names, the final sw which brings it all togather knows how to use this fact to intel-advantage
+
+text-files
+valid bm files
