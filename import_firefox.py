@@ -20,16 +20,14 @@ def process(line):
 	elif soup.find_all('h3'):
 		# this line contains category/folder related info
 		debut_ready = soup.find_all("h3")[0].get_text()
-		global debutant
-		debutant = debut_ready
+		globals()["debutant"] = debut_ready
 		# we are not appending ``debut_ready`` to ``context`` just yet because
 		# <DL> appears first, at 0 indent, before any <H3> and hence, we wait
 		# until a DL is found JUST after H3
 		return None
 	elif soup.find_all('dl'):
 		# nesting begin hint
-		global context
-		context.append(debutant)
+		globals()["context"].append(debutant)
 		return None
 	elif "</dl" in line.lower():
 		# de-nesting begin hint
