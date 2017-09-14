@@ -1,0 +1,25 @@
+Bookmarks Toolbar	- 1
+	Most Visited	- 10	xx
+	bm-toolbar		- 3
+Bookmarks Menu		- 3
+	Recent Tags		- 0
+	Ubuntu and Free	- 4
+	Mozilla Firefox	- 4
+Other Bookmarks		- 4
+	in-other		- 3
+
+-------------------------------------------
+
+
+on first glance, firefox does not respect nesting of bookmark's folders
+but looking at the source code says a different story
+
+the currently applicable foldername(s)(useful as hints in tagging) is contained in ``<H3>``
+the closing H3 maybe followed by DD, which is useless since I'd rarely used it
+the closing H3, when followed by a DL -->> indicates that all following links are nested
+as soon as closing DL appears, pop() the last inserted foldername
+
+
+now coming on to the meat, DD are mostly useless (for reason mentioned above)
+however, all the juicy stuff is contained within the A tags which are always preceeded by DT that doesn't close
+so capture entire A tag, extract title, link, date and add implied tag helper info
