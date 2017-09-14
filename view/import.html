@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Import bookmarks file</title>
+</head>
+<body>
+
+	<form action="import_links" method="POST" enctype="">
+		<!-- TODO: perhaps a routing issue aboce -->
+		What type of file are you uploading
+
+		<select>
+			<option value="text_bookmarks">text bookmarks</option>
+			<option value="opera_bookmarks">opera bookmarks</option>
+			<option value="firefox_bookmarks">firefox bookmarks</option>
+			<option value="chromium_bookmarks">chromium bookmarks</option>
+		</select>
+
+		<br>
+
+		<label>Choose file to import</label>
+		<input type="file" name="import_file" accept="">
+		<!-- <input type="file" name="import_file" onchange="this.form.submit();"> -->
+
+
+		<br>
+
+		<input type="submit" name="submit">
+	</form>
+
+</body>
+</html>

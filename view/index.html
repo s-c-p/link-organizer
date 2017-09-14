@@ -8,23 +8,27 @@
 <body>
 
 	<header>
-		<button class="simple import">Import</button>
+		<form action="import">
+			<input type="submit" name="Import">
+		</form>
+		<!--
 		<div class="search">
 			<input type="text" name="search" placeholder="Search">
 			<button class="simple search">Search</button>
 			<button class="simple advancedSearch">Advanced Search</button>
 		</div>
+		-->
 	</header>
 
 	<div class="report">
 		<div class="organized">
-			<a href="viewer">1437 bookmarks organized</a>
+			<a href="viewer">{{1437}} bookmarks organized</a>
 		</div>
 		<div class="pending">
-			<a href="organize">10 bookmarks to organize</a>
+			<a href="organize">{{10}} bookmarks to organize</a>
 		</div>
 		<div class="errors">
-			<a href="errors">2 errors encountered when organizing bookmarks</a>
+			<a href="errors">{{2}} errors encountered when organizing bookmarks</a>
 		</div>
 	</div>
 
