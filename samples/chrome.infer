@@ -3,3 +3,6 @@ Bookmarks bar			- 2 + '1' + 2
 		nested deeper	- 3 (notice the chronology)
 Other bookmarks			- 2
 
+--------------------------------------------------------------
+
+NOTE that ``Other bookmarks`` is implicit (not declared) in the exported file (i.e. the case where Other bookmarks doesn't have any nested folders)
