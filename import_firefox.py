@@ -26,11 +26,12 @@ def process(line):
 		# until a DL is found JUST after H3
 		return None
 	elif soup.find_all('dl'):
-		# nesting begin hint
+		# HINT: nesting begin
 		globals()["context"].append(debutant)
 		return None
 	elif "</dl" in line.lower():
-		# de-nesting begin hint
+	# elif line.strip().lower().startswith("</dl"):
+		# HINT: de-nesting begin
 		context.pop()
 		return None
 	else:
@@ -44,9 +45,9 @@ def main(file_path):
 			ans = process(aLine)
 			if ans:
 				# add to ``unorganized`` db
-				print(ans[1])
+				print(ans[-1])
 	assert len(context) == 0	# since last DL has been closed
 	return
 
 if __name__ == '__main__':
-	main('./samples/firefox.html')
+	main('/home/ubuntu-gnome/Downloads/bookmarks_9_16_17.html')
