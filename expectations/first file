@@ -11,15 +11,15 @@ a link of A user:
 	hasMany		*timestamp	derived, realtime, 
 
 interfaces
-	import
-	home page (overview, as in-- x organized, y pending, z errors)
-	viewer
-	organizer
-	custom editor
-	(inbuilt) searcher
-		q(#)
-		q(@)
-		q(words of comment and/or title and/or url)
+	[x] import
+	[ ] home page		(overview, as in-- x organized, y pending, z errors)
+	[ ] viewer			(NOTE: call s-c-p/anyDBviewer)
+	[ ] organizer		(NOTE: use enough abstraction to make it work easily with file-organizer too)
+	[ ] custom editor
+	[ ] (inbuilt) searcher
+		[ ] q(#)
+		[ ] q(@)
+		[ ] q(words of comment and/or title and/or url)
 
 
 future-- realtime ``tag suggestor`` based on title, comments
