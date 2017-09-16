@@ -1,6 +1,22 @@
 #!/usr/bin/env python3
 
-# TODO: try lxml
+"""
+	Works nicely on:
+		chrome
+		firefox
+	Works satisfactorily on:
+		opera
+	Not tested on:
+		safari		TODO
+
+	TODO:
+	try lxml, but take a look at
+	stackoverflow.com/q/16322862/
+	stackoverflow.com/q/2723015/
+	lxml.de/lxmlhtml.html
+	bit.ly/2fr3Vo9
+"""
+
 from bs4 import BeautifulSoup
 
 context = list()
@@ -9,7 +25,7 @@ debutant = str()	# empty string, representing the very first debutant i.e.
 					# default
 
 def process(line):
-	soup = BeautifulSoup(line)
+	soup = BeautifulSoup(line, 'lxml')
 	if soup.find_all("a"):
 		# this line is a link container
 		_obj = soup.find_all("a")[0]
@@ -50,4 +66,4 @@ def main(file_path):
 	return
 
 if __name__ == '__main__':
-	main('/home/ubuntu-gnome/Downloads/bookmarks_9_16_17.html')
+	main('./samples/opera.html')
