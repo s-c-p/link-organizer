@@ -7,10 +7,11 @@ TODO: create a ``unSetup.py``
 
 import sqlite3
 
-STAGING_FILE = "staging.db"
+USER_FILE = "1655df96-89f1-494c-955a-25758a93e104"
 
-with sqlite3.connect(STAGING_FILE) as conn:
+with sqlite3.connect(USER_FILE) as conn:
     cur = conn.cursor()
     cur.execute("""
-        CREATE TABLE
+        CREATE TABLE crude
+        CREATE TABLE organized
     """)

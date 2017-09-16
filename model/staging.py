@@ -7,6 +7,13 @@ which are as follows
 	title
 	timestamp
 	context (which helps in suggesting tags)
+and an additional field which would indicate the date/session when a given set
+of bookmarks were imported to the staging area (this is important from UX POV
+and will not be forwarded to organized.db)
+	SESSION_INDICATOR
+note that SESSION_INDICATOR will be same for all links imported at once so its
+a one-to-many relationship
+
 the purpose of this file is to
 	store above schema in a database
 	aid transition of data in immature phase to ripe phase

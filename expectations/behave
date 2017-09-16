@@ -1,0 +1,3 @@
+when I open the website I should see main page
+	containing info of organized, unorganized and errors
+	containing a link to import new bm
