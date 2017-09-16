@@ -66,4 +66,4 @@ def main(file_path):
 	return
 
 if __name__ == '__main__':
-	main('./samples/opera.html')
+	main('./test-data/bookmark-samples/opera.html')
