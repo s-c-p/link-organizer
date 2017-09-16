@@ -32,8 +32,7 @@ Crude = namedtuple("Crude",		# no need to use class in this case because
 @contextmanager
 def sqliteDB(file_name):
 	conn = sqlite3.connect(file_name)
-	cur = conn.cursor()
-	yield cur
+	yield conn.cursor()
 	conn.commit()
 	conn.close()
 	return
