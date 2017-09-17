@@ -6,6 +6,7 @@ a link of A user:
 	hasMany		comments	given, may be difficult to derive/extract so manual interference needed
 	hasOne		is_porn		derived, can be set by user
 								? how to handle duplicate links? I bm a page in NYC then do it again in ND 3 months later
+								track imports, save files with hash as name, don't import the same file twice
 	hasMany		system		derived once per session, realtime, may be faulty
 	hasMany		location	derived, realtime, may be seriously faulty
 	hasMany		timestamp	derived, realtime, 

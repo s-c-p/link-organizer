@@ -36,3 +36,5 @@ def sqliteDB(file_name):
 	conn.commit()
 	conn.close()
 	return
+
+derive intel, check reps
