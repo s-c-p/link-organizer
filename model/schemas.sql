@@ -4,13 +4,15 @@ crude is a subset of organized IF we ignore SESSION_INDICATOR
 CREATE TABLE computer
 ( _id INTEGER PRIMARY KEY AUTOINCREMENT
 , system TEXT NOT NULL
-, location TEXT NOT NULL
+, location TEXT
+, CONSTRAINT succintness UNIQUE (system, location)
 );
 
 CREATE TABLE imports
 ( importID INTEGER PRIMARY KEY AUTOINCREMENT
+, ts_on_zAxis TIMESTAMP
 , hash TEXT(40) NOT NULL
-, b85_file TEXT
+, file_contents TEXT
 , computer_id INTEGER
 , FOREIGN KEY (computer_id) REFERENCES computer(_id)
 );

@@ -10,8 +10,14 @@ def main(file_name):
 		importer = bi.standard_importer
 	else:
 		importer = bi.non_standard_importer
+	""" ----------- error catcha catchy ----------- """
 	raw_data = importer(file_name)
-	stage(raw_data, file_name)
+	""" ----------- error catcha catchy ----------- """
+	uaString = "Chrome-64bit on Fedora-20"
+	location = "Stalingrad, RU"
+	""" ----------- error catcha catchy ----------- """
+	stage(file_name, raw_data, uaString, location)
+	""" ----------- error catcha catchy ----------- """
 	return
 
 if __name__ == '__main__':
