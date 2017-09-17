@@ -21,6 +21,7 @@ the purpose of this file is to
 
 import time
 import sqlite3
+from bs4 import BeautifulSoup
 from collections import namedtuple
 from contextlib import contextmanager
 
@@ -28,16 +29,19 @@ import utils
 
 
 
+# constants and data structs--------------------------------------------------
 
-Crude = namedtuple("Crude",		# no need to use class in this case because
-	[ "url"						# the data is being dumped to SQLite DB not
-	, "title"					# JSON so custom encoder/decoder need not be
-	, "timestamp"				# defined and ``namedtuple`` will suffice
-	, "context" ])
 Clean = namedtuple("Clean",
-	[ ""])
+	[ "url"
+	, "title"
+	, "safeForWork"
+	, "date_created"
+	, "state_"
+	, "import_"])
 
 
+
+# functions-------------------------------------------------------------------
 
 @contextmanager
 def sqliteDB(file_name):
@@ -47,8 +51,37 @@ def sqliteDB(file_name):
 	conn.close()
 	return
 
-def proc(raw_data):
-	utils.partialDownload
+def process(crude_data, importID, oldData):
+	state_ = "staging"
+	import_ = importID
+
+	url = crude_data.url
+	top = utils.partialDownload(1024)	# TODO: this needs to be incremental if title finding fails
+	# TODO: this needs to be async
+	title = BeautifulSoup(top).find_all("title")[0].get_text()
+	safeForWork = "NotImplemented"
+	date_created = crude_data.raw_add_date
+
+	info4intel = crude_data.context
+	if len(crude_data.raw_title) <= len(title):
+		# entire thing is a comment or a true-copy
+		if title == crude_data.raw_title:	pass	# no intel
+		else:
+			info4intel.append(crude_data.raw_title)
+	else:
+		# (original) title is short => comment is perhaps prepended
+		a, _, b = crude_data.raw_title.partition(title)
+		worthy = list(filter(None, [a, b]))
+		info4intel += worthy
+	if oldData:
+		if date_created == oldData.date_created \
+		and 
+		if title != oldData.title:	# rare but possible
+			title = oldData.title
+
+	clean_data = Clean._make(
+		[url, title, safeForWork, date_created, state_, import_]
+	)
 	return clean_data
 
 def stage(file_path, raw_data, uaString, location):
@@ -67,20 +100,31 @@ def stage(file_path, raw_data, uaString, location):
 			[system, location])
 		except sqlite3.IntegrityError:
 			x = cur.execute(
-			"SELECT_id FROM computer WHERE system=? AND location=?",
+			"SELECT _id FROM computer WHERE system=? AND location=?",
 			[system, location])
 			reticle = x.fetchone()[0]
 		else:
 			reticle = cur.lastrowid
+
 	with open(file_path, mode='rt') as fh:
 		plain_text = fh.read()
 	hashVal = utils.calc_hash(file_path)
 	timestamp = int(time.time())
 	with sqliteDB(dbFile) as cur:
-		cur.execute(
-		"INSERT INTO imports (ts_on_zAxis, hash, file_contents, computer_id) VALUES (?,?,?,?)",
-		[timestamp, hashVal, plain_text, reticle])
-	clean_data = process(raw_data)
+		try:
+			cur.execute(
+			"INSERT INTO imports (ts_on_zAxis, hash, file_contents, computer_id) VALUES (?,?,?,?)",
+			[timestamp, hashVal, plain_text, reticle])
+		except:
+			x = cur.execute("SELECT ts_on_zAxis, computer_id FROM imports WHERE hash=?", [hashVal])
+			x = x.fetchall()[0]
+			raise RuntimeError("File already imported on {0} from {1}".format(x[0], x[1]))
+			return
+		else:
+			importID = cur.lastrowid
+
+	for aCrude in raw_data:
+		? if url exists in db get it as obj () and old_importID (ts_on_zAxis, computer & location)
+		semi = process(aCrude, importID, oldData)
+		INSERT...
 	return
-
-

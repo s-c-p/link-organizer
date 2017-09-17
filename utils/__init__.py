@@ -33,9 +33,8 @@ def partialDownload(url, max_bytes):
 		from urllib.parse import urlsplit
 		x = urlsplit(url)
 		tcp_host = x.netloc
-		i = url.index(tcp_host)+len(tcp_host)
-		remaining = url[i:]
-		del x, i, urlsplit
+		remaining = url.partition(tcp_host)[-1]
+		del x, urlsplit
 		message = \
 		"GET {0} HTTP/1.1\r\n" \
 		"HOST: {1}\r\n" \

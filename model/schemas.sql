@@ -11,7 +11,7 @@ CREATE TABLE computer
 CREATE TABLE imports
 ( importID INTEGER PRIMARY KEY AUTOINCREMENT
 , ts_on_zAxis TIMESTAMP
-, hash TEXT(40) NOT NULL
+, hash TEXT(40) UNIQUE NOT NULL
 , file_contents TEXT
 , computer_id INTEGER
 , FOREIGN KEY (computer_id) REFERENCES computer(_id)

@@ -21,25 +21,27 @@ from collections import namedtuple
 
 
 
+# constants and data struct---------------------------------------------------
 
-URL_REGEX = "http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
+URL_REGEX = \
+"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
 
-Raw = namedtuple("Raw",
-	[ "url"
-	, "raw_title"
-	, "raw_add_date"
-	, "intel"])
+Crude = namedtuple("Crude",		# no need to use class in this case because
+	[ "url"						# the data is being dumped to SQLite DB not
+	, "raw_title"				# JSON so custom encoder/decoder need not be
+	, "raw_add_date"			# defined and ``namedtuple`` will suffice
+	, "context"])
 
 
 
+# globals---------------------------------------------------------------------
 
 context = list()
 debutant = str()	# empty string, representing the very first debutant i.e.
 					# the namesless folder/category where all bookmarks go by
 					# default
 
-
-
+# functions-------------------------------------------------------------------
 
 def process(line):
 	""" experince revealed that this func works perfectly with:
@@ -57,7 +59,7 @@ def process(line):
 		title = _obj.get_text()
 		timestamp = _obj.get('add_date')
 		local_context = list(filter(None, context))
-		return Raw._make([url, title, timestamp, local_context])
+		return Crude._make([url, title, timestamp, local_context])
 	elif soup.find_all('h3'):
 		# this line contains category/folder related info
 		debut_ready = soup.find_all("h3")[0].get_text()
@@ -87,7 +89,7 @@ def standard_importer(file_path):
 			ans = process(aLine)
 			if ans:
 				raw_data.append(ans)
-				print(ans.intel)
+				print(ans.context)
 	assert len(context) == 0	# since last DL has been closed
 	return raw_data
 
@@ -103,7 +105,7 @@ def non_standard_importer(file_path):
 		for aLine in fh:
 			links = regex.findall(aLine)
 			for link in links:
-				ans = Raw._make([link, aLine, timestamp, []])
+				ans = Crude._make([link, aLine, timestamp, []])
 				raw_data.append(ans)
 	return raw_data
 
