@@ -4,21 +4,18 @@
 	Works nicely on:
 		chrome
 		firefox
-	Works satisfactorily on:
 		opera
 	Not tested on:
 		safari		TODO
 
-	TODO: information is almost never useless, in further iterations try to
-	preserve misc information like comments, DD, etc.
-
-	TODO: try lxml, but take a look at
-		stackoverflow.com/q/16322862/
-		stackoverflow.com/q/2723015/
-		lxml.de/lxmlhtml.html
-		bit.ly/2fr3Vo9
+	TODO: try lxml, because is lean and faster, but do take a look at:
+		- stackoverflow.com/q/16322862/
+		- stackoverflow.com/q/2723015/
+		- lxml.de/lxmlhtml.html
+		- bit.ly/2fr3Vo9
 """
 
+import re
 from bs4 import BeautifulSoup
 from collections import namedtuple
 
@@ -34,6 +31,13 @@ debutant = str()	# empty string, representing the very first debutant i.e.
 					# default
 
 def process(line):
+	""" experince revealed that this func works perfectly with:
+		<!DOCTYPE NETSCAPE-BOOKMARK-FILE-1>
+	TODO: information is almost never useless, in further iterations try to
+	preserve misc information like comments, DD, etc.
+	TODO: turns out <!DOCTYPE NETS...> also handles stuff like feeds &
+	webslices, read bit.ly/2fcIPx3 to make this function more robust
+	"""
 	soup = BeautifulSoup(line, 'lxml')
 	if soup.find_all("a"):
 		# this line is a link container
@@ -65,7 +69,7 @@ def process(line):
 		return False
 	return
 
-def main(file_path):
+def standard_importer(file_path):
 	raw_data = list()
 	with open(file_path, mode='rt') as fh:
 		for aLine in fh:
@@ -76,7 +80,23 @@ def main(file_path):
 	assert len(context) == 0	# since last DL has been closed
 	return
 
+def non_standard_importer(file_path):
+	""" my habit is to use tab-indentation to put a list of links under
+	a topic, others may do it differently
+	AND for this reason, it is really important that we keep a copy of
+	the original import-file in database
+	"""
+	[url, title, timestamp, local_context]
+	x = os.stat(file_path).st_mtime
+	timestamp = datetime.datetime.fromtimestamp(x)
+	regex = re.compile("http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+")
+	with open(file_path, mode="rt") as fh:
+		for aLine in fh:
+			hope = regex.findall(aLine)
+			if hope:	links+= hope
+	return raw_data
+
 if __name__ == '__main__':
-	main('./test-data/bookmark-samples/opera.html')
-	main('./test-data/bookmark-samples/chrome.html')
-	main('./test-data/bookmark-samples/firefox.html')
+	standard_importer('./test-data/bookmark-samples/opera.html')
+	standard_importer('./test-data/bookmark-samples/chrome.html')
+	standard_importer('./test-data/bookmark-samples/firefox.html')
