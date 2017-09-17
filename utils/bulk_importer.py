@@ -19,16 +19,27 @@ import re
 from bs4 import BeautifulSoup
 from collections import namedtuple
 
+
+
+
+URL_REGEX = "http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
+
 Raw = namedtuple("Raw",
 	[ "url"
 	, "raw_title"
 	, "raw_add_date"
 	, "intel"])
 
+
+
+
 context = list()
 debutant = str()	# empty string, representing the very first debutant i.e.
 					# the namesless folder/category where all bookmarks go by
 					# default
+
+
+
 
 def process(line):
 	""" experince revealed that this func works perfectly with:
@@ -75,10 +86,10 @@ def standard_importer(file_path):
 		for aLine in fh:
 			ans = process(aLine)
 			if ans:
-				# raw_data.append(ans)
+				raw_data.append(ans)
 				print(ans.intel)
 	assert len(context) == 0	# since last DL has been closed
-	return
+	return raw_data
 
 def non_standard_importer(file_path):
 	""" my habit is to use tab-indentation to put a list of links under
@@ -86,17 +97,18 @@ def non_standard_importer(file_path):
 	AND for this reason, it is really important that we keep a copy of
 	the original import-file in database
 	"""
-	[url, title, timestamp, local_context]
-	x = os.stat(file_path).st_mtime
-	timestamp = datetime.datetime.fromtimestamp(x)
-	regex = re.compile("http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+")
+	regex = re.compile(URL_REGEX)
+	timestamp = int(os.stat(file_path).st_mtime)
 	with open(file_path, mode="rt") as fh:
 		for aLine in fh:
-			hope = regex.findall(aLine)
-			if hope:	links+= hope
+			links = regex.findall(aLine)
+			for link in links:
+				ans = Raw._make([link, aLine, timestamp, []])
+				raw_data.append(ans)
 	return raw_data
 
 if __name__ == '__main__':
 	standard_importer('./test-data/bookmark-samples/opera.html')
 	standard_importer('./test-data/bookmark-samples/chrome.html')
 	standard_importer('./test-data/bookmark-samples/firefox.html')
+	# non_standard_importer('./test-data/bookmark-samples/samp.txt')

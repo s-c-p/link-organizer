@@ -20,16 +20,21 @@ the purpose of this file is to
 """
 
 import base64
-import hashlib
 import sqlite3
 from collections import namedtuple
 from contextlib import contextmanager
+
+
+
 
 Crude = namedtuple("Crude",		# no need to use class in this case because
 	[ "url"						# the data is being dumped to SQLite DB not
 	, "title"					# JSON so custom encoder/decoder need not be
 	, "timestamp"				# defined and ``namedtuple`` will suffice
 	, "context" ])
+
+
+
 
 @contextmanager
 def sqliteDB(file_name):
@@ -38,13 +43,6 @@ def sqliteDB(file_name):
 	conn.commit()
 	conn.close()
 	return
-
-def calc_hash(file_path):
-	hasher = hashlib.sha256()
-	with open(file_path, mode="rb") as fh:
-		for aBlock in iter(lambda: fh.read(1048576), b""):
-			hasher.update(aBlock)
-	return hasher.hexdigest()
 
 def stage(raw_data, file_path):
 	""" derive intel, check reps
