@@ -20,6 +20,7 @@ the purpose of this file is to
 """
 
 import base64
+import hashlib
 import sqlite3
 from collections import namedtuple
 from contextlib import contextmanager
@@ -38,10 +39,20 @@ def sqliteDB(file_name):
 	conn.close()
 	return
 
-derive intel, check reps
+def calc_hash(file_path):
+	hasher = hashlib.sha256()
+	with open(file_path, mode="rb") as fh:
+		for aBlock in iter(lambda: fh.read(1048576), b""):
+			hasher.update(aBlock)
+	return hasher.hexdigest()
 
-now now, link can repeat in an entirely different import or in incremental import
-	SO if link && computer && adddate match, ignore
-	if adddate or computer is different increase count in intel
-	if comment is different inform intel
+def stage(raw_data, file_path):
+	""" derive intel, check reps
+	now now, link can repeat in an entirely different import or in incremental import
+		SO if link && computer && adddate match, ignore
+		if adddate or computer is different increase count in intel
+		if comment is different inform intel
+
+	"""
+	return
 

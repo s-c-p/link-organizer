@@ -20,6 +20,13 @@
 """
 
 from bs4 import BeautifulSoup
+from collections import namedtuple
+
+Raw = namedtuple("Raw",
+	[ "url"
+	, "raw_title"
+	, "raw_add_date"
+	, "intel"])
 
 context = list()
 debutant = str()	# empty string, representing the very first debutant i.e.
@@ -34,7 +41,8 @@ def process(line):
 		url = _obj.get('href')
 		title = _obj.get_text()
 		timestamp = _obj.get('add_date')
-		return (url, title, timestamp, context)
+		local_context = list(filter(None, context))
+		return Raw._make([url, title, timestamp, local_context])
 	elif soup.find_all('h3'):
 		# this line contains category/folder related info
 		debut_ready = soup.find_all("h3")[0].get_text()
@@ -50,7 +58,7 @@ def process(line):
 	elif "</dl" in line.lower():
 	# elif line.strip().lower().startswith("</dl"):
 		# HINT: de-nesting begin
-		context.pop()
+		globals()["context"].pop()
 		return None
 	else:
 		# this line is not intersting
@@ -58,14 +66,17 @@ def process(line):
 	return
 
 def main(file_path):
+	raw_data = list()
 	with open(file_path, mode='rt') as fh:
 		for aLine in fh:
 			ans = process(aLine)
 			if ans:
-				# add to ``unorganized`` db
-				print(ans[-1])
+				# raw_data.append(ans)
+				print(ans.intel)
 	assert len(context) == 0	# since last DL has been closed
 	return
 
 if __name__ == '__main__':
 	main('./test-data/bookmark-samples/opera.html')
+	main('./test-data/bookmark-samples/chrome.html')
+	main('./test-data/bookmark-samples/firefox.html')
