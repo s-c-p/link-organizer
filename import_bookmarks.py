@@ -10,6 +10,10 @@
 		safari		TODO
 
 	TODO:
+	information is almost never useless, in further iterations
+	try to preserve misc information like comments, DD, etc.
+
+	TODO:
 	try lxml, but take a look at
 	stackoverflow.com/q/16322862/
 	stackoverflow.com/q/2723015/
