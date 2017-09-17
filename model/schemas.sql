@@ -9,8 +9,10 @@ CREATE TABLE computer
 
 CREATE TABLE imports
 ( importID INTEGER PRIMARY KEY AUTOINCREMENT
-, hash VARCHAR(40) NOT NULL
-, file BLOB
+, hash TEXT(40) NOT NULL
+, b85_file TEXT
+, computer_id INTEGER
+, FOREIGN KEY (computer_id) REFERENCES computer(_id)
 );
 
 
@@ -32,19 +34,18 @@ CREATE TABLE links
 , title TEXT NOT NULL
 , safeForWork BOOLEAN
 , date_created TIMESTAMP
-, id_id INTEGER
 , state_id INTEGER
-, FOREIGN KEY (id_id) REFERENCES identity(_id)
+, import_id INTEGER
 , FOREIGN KEY (state_id) REFERENCES enum_states(_id)
+, FOREIGN KEY (import_id) REFERENCES import(importID)
 );
 
 CREATE TABLE intel
-( intelID PRIMARY KEY AUTOINCREMENT
+( intelID INTEGER PRIMARY KEY AUTOINCREMENT
 , FK_linkID INTEGER
 , information TEXT NOT NULL
+, ts_on_zAxis TIMESTAMP
 , FOREIGN KEY (FK_linkID) REFERENCES links(linkID)
-, sys_info
-, ts_on_zAxis
 );
 
 

@@ -19,6 +19,7 @@ the purpose of this file is to
 	aid transition of data in immature phase to ripe phase
 """
 
+import base64
 import sqlite3
 from collections import namedtuple
 from contextlib import contextmanager
@@ -38,3 +39,9 @@ def sqliteDB(file_name):
 	return
 
 derive intel, check reps
+
+now now, link can repeat in an entirely different import or in incremental import
+	SO if link && computer && adddate match, ignore
+	if adddate or computer is different increase count in intel
+	if comment is different inform intel
+

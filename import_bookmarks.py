@@ -9,16 +9,14 @@
 	Not tested on:
 		safari		TODO
 
-	TODO:
-	information is almost never useless, in further iterations
-	try to preserve misc information like comments, DD, etc.
+	TODO: information is almost never useless, in further iterations try to
+	preserve misc information like comments, DD, etc.
 
-	TODO:
-	try lxml, but take a look at
-	stackoverflow.com/q/16322862/
-	stackoverflow.com/q/2723015/
-	lxml.de/lxmlhtml.html
-	bit.ly/2fr3Vo9
+	TODO: try lxml, but take a look at
+		stackoverflow.com/q/16322862/
+		stackoverflow.com/q/2723015/
+		lxml.de/lxmlhtml.html
+		bit.ly/2fr3Vo9
 """
 
 from bs4 import BeautifulSoup
