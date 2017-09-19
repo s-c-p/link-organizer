@@ -29,6 +29,7 @@ def initializeDB(USER_FILE):
 		, file_contents TEXT
 		, computer_id INTEGER
 		, FOREIGN KEY (computer_id) REFERENCES computer(_id)
+		, CONSTRAINT succintness UNIQUE (hash)
 		);
 	""")
 	cur.execute("""

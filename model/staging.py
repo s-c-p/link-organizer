@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-when import_bookmark.py runs, it returns a list of tuples, the contents of
+when bulk_import.py runs, it returns a list of tuples, the contents of
 which are as follows
 	url
 	title
@@ -59,7 +59,7 @@ def process(crude_data, importID, oldData):
 	top = utils.partialDownload(1024)	# TODO: this needs to be incremental if title finding fails
 	# TODO: this needs to be async
 	title = BeautifulSoup(top).find_all("title")[0].get_text()
-	safeForWork = "NotImplemented"
+	safeForWork = NotImplemented
 	date_created = crude_data.raw_add_date
 
 	info4intel = crude_data.context
@@ -99,6 +99,8 @@ def stage(file_path, raw_data, uaString, location):
 			"INSERT INTO computer (system, location) VALUES (?,?)",
 			[system, location])
 		except sqlite3.IntegrityError:
+			# => unique constraint (system, location) failed, i.e. we have already
+			# imported something from this computer in past
 			x = cur.execute(
 			"SELECT _id FROM computer WHERE system=? AND location=?",
 			[system, location])
@@ -106,16 +108,17 @@ def stage(file_path, raw_data, uaString, location):
 		else:
 			reticle = cur.lastrowid
 
-	with open(file_path, mode='rt') as fh:
-		plain_text = fh.read()
 	hashVal = utils.calc_hash(file_path)
 	timestamp = int(time.time())
+	with open(file_path, mode='rt') as fh:
+		plain_text = fh.read()
 	with sqliteDB(dbFile) as cur:
 		try:
 			cur.execute(
 			"INSERT INTO imports (ts_on_zAxis, hash, file_contents, computer_id) VALUES (?,?,?,?)",
 			[timestamp, hashVal, plain_text, reticle])
-		except:
+		except sqlite3.IntegrityError:
+			# UNIQUE constraint failed: imports.hash
 			x = cur.execute("SELECT ts_on_zAxis, computer_id FROM imports WHERE hash=?", [hashVal])
 			x = x.fetchall()[0]
 			raise RuntimeError("File already imported on {0} from {1}".format(x[0], x[1]))
