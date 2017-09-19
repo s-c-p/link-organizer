@@ -27,21 +27,22 @@ def partialDownload(url, max_bytes):
 	try:
 		import requests
 	except ImportError:
-		import socket, time
-		tcp_port = 80
+		TCP_PORT = 80
 		MAX_LIMIT = max_bytes
 		from urllib.parse import urlsplit
 		x = urlsplit(url)
-		tcp_host = x.netloc
-		remaining = url.partition(tcp_host)[-1]
+		TCP_HOST = x.netloc
+		remaining = url.partition(TCP_HOST)[-1]
 		del x, urlsplit
 		message = \
 		"GET {0} HTTP/1.1\r\n" \
 		"HOST: {1}\r\n" \
 		"User-Agent: Custom/0.0.1\r\n" \
-		"Accept: */*\r\n\n".format(remaining, tcp_host)
+		"Accept: */*\r\n\n".format(remaining, TCP_HOST)
+		import time
+		import socket
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # Create a socket
-		s.connect((tcp_host, tcp_port)) # Connect to remote socket at given address
+		s.connect((TCP_HOST, TCP_PORT)) # Connect to remote socket at given address
 		s.send(message) # Let's begin the transaction
 		time.sleep(0.1)
 		# Keep reading from socket till max limit is reached

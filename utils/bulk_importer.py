@@ -6,7 +6,8 @@
 		firefox
 		opera
 	Not tested on:
-		safari		TODO
+		vivaldi		TODO
+		safari
 
 	TODO: try lxml, because is lean and faster, but do take a look at:
 		- stackoverflow.com/q/16322862/
