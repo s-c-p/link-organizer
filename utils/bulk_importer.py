@@ -73,8 +73,7 @@ def process(line):
 		# HINT: nesting begin
 		globals()["context"].append(debutant)
 		return None
-	elif "</dl" in line.lower():
-	# elif line.strip().lower().startswith("</dl"):
+	elif line.strip().lower().startswith("</dl"):
 		# HINT: de-nesting begin
 		globals()["context"].pop()
 		return None
