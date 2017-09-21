@@ -1,8 +1,19 @@
+`
+Files affected by changes in this file:
+	setup.py, staging.py
+`
+
 /*
 crude is a subset of organized IF we ignore SESSION_INDICATOR
 */
-CREATE TABLE computer
-( _id INTEGER PRIMARY KEY AUTOINCREMENT
+`
+I think 'computer' table is really useless, but anyway
+one computer can make many imports
+and the same file may be imported from 1+ computers
+`
+
+CREATE TABLE computers
+( computerID INTEGER PRIMARY KEY AUTOINCREMENT
 , system TEXT NOT NULL
 , location TEXT
 , CONSTRAINT succintness UNIQUE (system, location)
@@ -10,12 +21,19 @@ CREATE TABLE computer
 
 CREATE TABLE imports
 ( importID INTEGER PRIMARY KEY AUTOINCREMENT
+, file_contents TEXT
 , ts_on_zAxis TIMESTAMP
 , hash TEXT(40) NOT NULL
-, file_contents TEXT
-, computer_id INTEGER
-, FOREIGN KEY (computer_id) REFERENCES computer(_id)
 , CONSTRAINT succintness UNIQUE (hash)
+);
+
+CREATE TABLE incoming_files
+( _id INTEGER PRIMARY KEY AUTOINCREMENT
+, FK_importID INTEGER NOT NULL
+, FK_computerID INTEGER NOT NULL
+, FOREIGN KEY (FK_importID) REFERENCES imports(importID)
+, FOREIGN KEY (FK_computerID) REFERENCES computers(computerID)
+, CONSTRAINT xyz UNIQUE (FK_importID, FK_computerID)
 );
 
 

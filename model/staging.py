@@ -54,14 +54,12 @@ def sqliteDB(file_name):
 def process(crude_data, importID):
 	state_ = "staging"
 	import_ = importID
-
 	url = crude_data.url
 	top = utils.partialDownload(1024)	# TODO: this needs to be incremental if title finding fails
 	# TODO: this needs to be async
 	title = BeautifulSoup(top).find_all("title")[0].get_text()
 	safeForWork = NotImplemented
 	date_created = crude_data.raw_add_date
-
 	return Clean._make(
 		[url, title, safeForWork, date_created, state_, import_]
 	)
@@ -81,11 +79,23 @@ def basicIntel(clean_data, old_title, context):
 	return info4intel
 
 def advancedIntel(oldData, newData):
-	if oldData:
-		if date_created == oldData.date_created \
-		and 
-		if title != oldData.title:	# rare but possible
-			title = oldData.title
+	# if importID matches, then this should have never happened in the
+	# first place because of the error raised by initNewImport
+	""" derive intel, check reps
+	now now, link can repeat in an entirely different import or in incremental import
+		SO if link && computer && adddate match, ignore
+		if adddate or computer is different increase count in intel
+		if comment is different inform intel
+	title
+	safeForWork
+	date_created
+	state_id
+	import_id
+	"""
+	if newData.date_created == oldData.date_created \
+	and 
+	if title != oldData.title:	# rare but possible
+		title = oldData.title
 	return
 
 def initNewComputer(system, location):
@@ -141,13 +151,6 @@ def insertCleanData(clean_data):
 	return linkID
 
 def stage(file_path, raw_data, uaString, location):
-	""" derive intel, check reps
-	now now, link can repeat in an entirely different import or in incremental import
-		SO if link && computer && adddate match, ignore
-		if adddate or computer is different increase count in intel
-		if comment is different inform intel
-
-	"""
 	system = utils.humanizeUA(uaString)
 	reticle = initNewComputer(system, location)
 	importID = initNewImport(file_path, reticle)
@@ -167,8 +170,23 @@ def stage(file_path, raw_data, uaString, location):
 			newData = clean_data
 			oldData = utlty_getOldLink(newData.url)
 			diff_based_intel = advancedIntel(oldData, newData)
-			if newData.import_ != oldData.import_:
-				update_db(newData)
+			# NOTE: newData.import_ == oldData.import_ will never happen under normal flow of control
+			update_db(newData)
 		finally:
 			insert base_intel & diff_based_intel if it exists INTO `link`
 	return
+
+def utlty_getOldLink(url):
+	with sqliteDB(dbFile) as cur:
+		x = cur.execute(
+		"SELECT url, title, safeForWork, date_created, state_id, import_id FROM links WHERE url=?",
+		[url])
+		x = x.fetchone()
+	ans = Clean(*x)
+	return ans
+
+def utlty_deENUMfunc(state):
+	ans = 2
+	# NOTE: why hardcoded? because we can read from DB but the
+	# value is gonna be constant so hardcoded
+	return ans
