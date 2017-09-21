@@ -51,7 +51,7 @@ def sqliteDB(file_name):
 	conn.close()
 	return
 
-def process(crude_data, importID, oldData):
+def process(crude_data, importID):
 	state_ = "staging"
 	import_ = importID
 
@@ -62,37 +62,33 @@ def process(crude_data, importID, oldData):
 	safeForWork = NotImplemented
 	date_created = crude_data.raw_add_date
 
-	info4intel = crude_data.context
-	if len(crude_data.raw_title) <= len(title):
+	return Clean._make(
+		[url, title, safeForWork, date_created, state_, import_]
+	)
+
+def basicIntel(clean_data, old_title, context):
+	info4intel = context
+	if len(old_title) <= len(title):
 		# entire thing is a comment or a true-copy
-		if title == crude_data.raw_title:	pass	# no intel
+		if clean_data.title == old_title:	pass	# no intel
 		else:
-			info4intel.append(crude_data.raw_title)
+			info4intel.append(old_title)
 	else:
 		# (original) title is short => comment is perhaps prepended
-		a, _, b = crude_data.raw_title.partition(title)
+		a, _, b = old_title.partition(title)
 		worthy = list(filter(None, [a, b]))
 		info4intel += worthy
+	return info4intel
+
+def advancedIntel(oldData, newData):
 	if oldData:
 		if date_created == oldData.date_created \
 		and 
 		if title != oldData.title:	# rare but possible
 			title = oldData.title
+	return
 
-	clean_data = Clean._make(
-		[url, title, safeForWork, date_created, state_, import_]
-	)
-	return clean_data
-
-def stage(file_path, raw_data, uaString, location):
-	""" derive intel, check reps
-	now now, link can repeat in an entirely different import or in incremental import
-		SO if link && computer && adddate match, ignore
-		if adddate or computer is different increase count in intel
-		if comment is different inform intel
-
-	"""
-	system = utils.humanizeUA(uaString)
+def initNewComputer(system, location):
 	with sqliteDB(dbFile) as cur:
 		try:
 			cur.execute(
@@ -107,7 +103,9 @@ def stage(file_path, raw_data, uaString, location):
 			reticle = x.fetchone()[0]
 		else:
 			reticle = cur.lastrowid
+	return reticle
 
+def initNewImport(file_path, computer_id):
 	hashVal = utils.calc_hash(file_path)
 	timestamp = int(time.time())
 	with open(file_path, mode='rt') as fh:
@@ -121,13 +119,43 @@ def stage(file_path, raw_data, uaString, location):
 			# UNIQUE constraint failed: imports.hash
 			x = cur.execute("SELECT ts_on_zAxis, computer_id FROM imports WHERE hash=?", [hashVal])
 			x = x.fetchall()[0]
-			raise RuntimeError("File already imported on {0} from {1}".format(x[0], x[1]))
-			return
+			raise RuntimeError("File already imported on {0} from {1}".format(x[0], x[1])) from None
 		else:
 			importID = cur.lastrowid
+	return importID
+
+def insertCleanData(clean_data):
+	return
+
+def stage(file_path, raw_data, uaString, location):
+	""" derive intel, check reps
+	now now, link can repeat in an entirely different import or in incremental import
+		SO if link && computer && adddate match, ignore
+		if adddate or computer is different increase count in intel
+		if comment is different inform intel
+
+	"""
+	system = utils.humanizeUA(uaString)
+	reticle = initNewComputer(system, location)
+	importID = initNewImport(file_path, reticle)
 
 	for aCrude in raw_data:
-		? if url exists in db get it as obj () and old_importID (ts_on_zAxis, computer & location)
-		semi = process(aCrude, importID, oldData)
-		INSERT...
+		# ? if url exists in db get it as obj () and old_importID (ts_on_zAxis, computer & location)
+		# semi = process(aCrude, importID, oldData)
+		# INSERT...
+		context = aCrude.context
+		old_title = aCrude.raw_title
+		clean_data = process(aCrude, importID)
+		base_intel = basicIntel(clean_data, old_title, context)
+		try:
+			insertCleanData(clean_data)
+		except sqlite3.IntegrityError:
+			# => url already exists, time to increase intel
+			newData = clean_data
+			oldData = get entire obj
+			diff_based_intel = advancedIntel(oldData, newData)
+			if newData != oldData:
+				update_db(newData)
+		finally:
+			insert base_intel & diff_based_intel if it exists
 	return

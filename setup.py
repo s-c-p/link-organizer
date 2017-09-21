@@ -53,6 +53,7 @@ def initializeDB(USER_FILE):
 		, import_id INTEGER
 		, FOREIGN KEY (state_id) REFERENCES enum_states(_id)
 		, FOREIGN KEY (import_id) REFERENCES import(importID)
+		, CONSTRAINT succintness UNIQUE (url)
 		);
 	""")
 	cur.execute("""
