@@ -125,14 +125,20 @@ def initNewImport(file_path, computer_id):
 	return importID
 
 def insertCleanData(clean_data):
+	url = clean_data.url
+	title = clean_data.title
+	state_id = utlty_deENUMfunc(clean_data.state_)
+	import_id = clean_data.import_
+	safeForWork = clean_data.safeForWork
+	date_created = clean_data.date_created
 	# search `sqlite3 namedtuple` and look at 
 	# http://peter-hoffmann.com/2010/python-sqlite-namedtuple-factory.html
 	with sqliteDB(dbFile) as cur:
-		try:
-			cur.execute(
-			"INSERT INTO links (url, title, safeForWork, date_created, state_id, import_id) VALUES (?,?,?,?,?,?)"
-			[url, ])
-	return
+		cur.execute(
+		"INSERT INTO links (url, title, safeForWork, date_created, state_id, import_id) VALUES (?,?,?,?,?,?)"
+		[url, title, safeForWork, date_created, state_id, import_id])
+		linkID = cur.lastrowid
+	return linkID
 
 def stage(file_path, raw_data, uaString, location):
 	""" derive intel, check reps
@@ -159,7 +165,7 @@ def stage(file_path, raw_data, uaString, location):
 		except sqlite3.IntegrityError:
 			# => url already exists, time to increase intel
 			newData = clean_data
-			oldData = get entire obj
+			oldData = utlty_getOldLink(newData.url)
 			diff_based_intel = advancedIntel(oldData, newData)
 			if newData.import_ != oldData.import_:
 				update_db(newData)
