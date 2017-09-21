@@ -98,24 +98,7 @@ def advancedIntel(oldData, newData):
 		title = oldData.title
 	return
 
-def initNewComputer(system, location):
-	with sqliteDB(dbFile) as cur:
-		try:
-			cur.execute(
-			"INSERT INTO computer (system, location) VALUES (?,?)",
-			[system, location])
-		except sqlite3.IntegrityError:
-			# => unique constraint (system, location) failed, i.e. we have already
-			# imported something from this computer in past
-			x = cur.execute(
-			"SELECT _id FROM computer WHERE system=? AND location=?",
-			[system, location])
-			reticle = x.fetchone()[0]
-		else:
-			reticle = cur.lastrowid
-	return reticle
-
-def initNewImport(file_path, computer_id):
+def initNewImport(file_path):
 	hashVal = utils.calc_hash(file_path)
 	timestamp = int(time.time())
 	with open(file_path, mode='rt') as fh:
@@ -123,8 +106,8 @@ def initNewImport(file_path, computer_id):
 	with sqliteDB(dbFile) as cur:
 		try:
 			cur.execute(
-			"INSERT INTO imports (ts_on_zAxis, hash, file_contents, computer_id) VALUES (?,?,?,?)",
-			[timestamp, hashVal, plain_text, reticle])
+			"INSERT INTO imports (file_contents, ts_on_zAxis, hash) VALUES (?,?,?)",
+			[plain_text, timestamp, hashVal])
 		except sqlite3.IntegrityError:
 			# UNIQUE constraint failed: imports.hash
 			x = cur.execute("SELECT ts_on_zAxis, computer_id FROM imports WHERE hash=?", [hashVal])
@@ -150,11 +133,8 @@ def insertCleanData(clean_data):
 		linkID = cur.lastrowid
 	return linkID
 
-def stage(file_path, raw_data, uaString, location):
-	system = utils.humanizeUA(uaString)
-	reticle = initNewComputer(system, location)
-	importID = initNewImport(file_path, reticle)
-
+def stage(file_path, raw_data):
+	importID = initNewImport(file_path)
 	for aCrude in raw_data:
 		# ? if url exists in db get it as obj () and old_importID (ts_on_zAxis, computer & location)
 		# semi = process(aCrude, importID, oldData)

@@ -3,6 +3,9 @@ Files affected by changes in this file:
 	setup.py, staging.py
 `
 
+
+
+
 /*
 crude is a subset of organized IF we ignore SESSION_INDICATOR
 */
@@ -11,13 +14,12 @@ I think 'computer' table is really useless, but anyway
 one computer can make many imports
 and the same file may be imported from 1+ computers
 `
-
-CREATE TABLE computers
-( computerID INTEGER PRIMARY KEY AUTOINCREMENT
-, system TEXT NOT NULL
-, location TEXT
-, CONSTRAINT succintness UNIQUE (system, location)
-);
+-- CREATE TABLE computers
+-- ( computerID INTEGER PRIMARY KEY AUTOINCREMENT
+-- , system TEXT NOT NULL
+-- , location TEXT
+-- , CONSTRAINT succintness UNIQUE (system, location)
+-- );
 
 CREATE TABLE imports
 ( importID INTEGER PRIMARY KEY AUTOINCREMENT
@@ -27,14 +29,17 @@ CREATE TABLE imports
 , CONSTRAINT succintness UNIQUE (hash)
 );
 
-CREATE TABLE incoming_files
-( _id INTEGER PRIMARY KEY AUTOINCREMENT
-, FK_importID INTEGER NOT NULL
-, FK_computerID INTEGER NOT NULL
-, FOREIGN KEY (FK_importID) REFERENCES imports(importID)
-, FOREIGN KEY (FK_computerID) REFERENCES computers(computerID)
-, CONSTRAINT xyz UNIQUE (FK_importID, FK_computerID)
-);
+-- CREATE TABLE incoming_files
+-- ( _id INTEGER PRIMARY KEY AUTOINCREMENT
+-- , FK_importID INTEGER NOT NULL
+-- , FK_computerID INTEGER NOT NULL
+-- , FOREIGN KEY (FK_importID) REFERENCES imports(importID)
+-- , FOREIGN KEY (FK_computerID) REFERENCES computers(computerID)
+-- , CONSTRAINT xyz UNIQUE (FK_importID, FK_computerID)
+-- );
+
+
+
 
 
 
@@ -58,7 +63,7 @@ CREATE TABLE links
 , state_id INTEGER
 , import_id INTEGER
 , FOREIGN KEY (state_id) REFERENCES enum_states(_id)
-, FOREIGN KEY (import_id) REFERENCES import(importID)
+, FOREIGN KEY (import_id) REFERENCES imports(importID)
 , CONSTRAINT succintness UNIQUE (url)
 );
 
@@ -73,6 +78,11 @@ CREATE TABLE intel
 
 
 
+
+
+
+
+
 `
 link   has-many   tags   AND
 tag    has-many   links  ALL
@@ -82,6 +92,7 @@ CREATE TABLE tags
 ( tagID INTEGER PRIMARY KEY AUTOINCREMENT
 , tag_name TEXT NOT NULL
 );
+
 CREATE TABLE categories
 ( _id INTEGER PRIMARY KEY AUTOINCREMENT
 , FK_tagID INTEGER
@@ -90,6 +101,10 @@ CREATE TABLE categories
 , FOREIGN KEY (FK_linkID) REFERENCES links(linkID)
 , CONSTRAINT succintness UNIQUE (FK_tagID, FK_linkID)
 );
+
+
+
+
 
 
 
@@ -103,6 +118,7 @@ CREATE TABLE projects
 ( projectID INTEGER PRIMARY KEY AUTOINCREMENT
 , project_name TEXT NOT NULL
 );
+
 CREATE TABLE project_tracker
 ( _id INTEGER PRIMARY KEY AUTOINCREMENT
 , FK_linkID INTEGER
