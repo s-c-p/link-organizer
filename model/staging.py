@@ -200,7 +200,7 @@ def stage(file_path, raw_data):
 		old_title = aCrude.raw_title
 		timestamp = int(time.time())	# needed for inserting intel data
 		clean_data = process(aCrude, importID)
-		base_intel = basicIntel(clean_data, old_title, context)
+		base_intel = basicIntel(clean_data, old_title, context) # not yet sure wheather we need it or not but still we do this from DRY
 		try:
 			linkID = insertCleanData(clean_data)
 		except sqlite3.IntegrityError:
@@ -211,11 +211,19 @@ def stage(file_path, raw_data):
 			# NOTE: newData.import_ == oldData.import_ will never happen under
 			# normal flow of control
 			if final == oldData:
+				# this is the case of incremental import_
+				# no updation of link's attributes and no new intel if found
 				pass
 			else:
-				updateLinkDetails(linkID, final)
+				# same link was stored on 2 different systems/locations and
+				# probably has different comments/tags/etc. which can give
+				# helpful information
+				insertIntel(linkID, timestamp, base_intel)
 				insertIntel(linkID, timestamp, diff_intel)
-		insertIntel(linkID, timestamp, base_intel)
+				updateLinkDetails(linkID, final)
+		else:
+			# Link is definately new & hence intel is new
+			insertIntel(linkID, timestamp, base_intel)
 	return
 
 def utlty_getOldLink(url):
