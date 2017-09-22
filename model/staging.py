@@ -60,8 +60,7 @@ def initNewImport(file_path):
 		except sqlite3.IntegrityError:
 			# UNIQUE constraint failed: imports.hash
 			x = cur.execute(
-				"SELECT ts_on_zAxis FROM imports WHERE hash=?",
-				[hashVal]
+				"SELECT ts_on_zAxis FROM imports WHERE hash=?", [hashVal]
 			)
 			x = x.fetchall()[0]
 			raise RuntimeError("File already imported on {0}".format(x[0]))
@@ -102,16 +101,16 @@ def insertCleanData(clean_data):
 		linkID = cur.lastrowid
 	return linkID
 
-?def basicIntel(clean_data, old_title, context):
+def basicIntel(clean_data, bkmk_title, context):
 	info4intel = context
-	if len(old_title) <= len(title):
+	if len(bkmk_title) <= len(title):
 		# entire thing is a comment or a true-copy
-		if clean_data.title == old_title:	pass	# no intel
+		if clean_data.title == bkmk_title:	pass	# no intel
 		else:
-			info4intel.append(old_title)
+			info4intel.append(bkmk_title)
 	else:
 		# (original) title is short => comment is perhaps prepended
-		a, _, b = old_title.partition(title)
+		a, _, b = bkmk_title.partition(title)
 		worthy = list(filter(None, [a, b]))
 		info4intel += worthy
 	return info4intel
@@ -151,7 +150,8 @@ def advancedIntel(oldData, newData):
 		final.date_created = min(a, b)
 		info4intel.append(f"date_created {a}")
 		info4intel.append(f"date_created {b}")
-	if newData.title != oldData.title:	# rare but possible
+	# rare but possible
+	if newData.title != oldData.title:
 		final.title = newData.title
 		info4intel.append(oldData.title)
 	if newData.safeForWork != oldData.safeForWork:
@@ -192,15 +192,14 @@ def insertIntel(linkID, timestamp, infoSet):
 def stage(file_path, raw_data):
 	importID = initNewImport(file_path)
 	for aCrude in raw_data:
-		# ? if url exists in db get it as obj () and old_importID (ts_on_zAxis,
-		# computer & location)
-		# semi = process(aCrude, importID, oldData)
-		# INSERT...
+		# needed for inserting intel data
+		timestamp = int(time.time())
 		context = aCrude.context
-		old_title = aCrude.raw_title
-		timestamp = int(time.time())	# needed for inserting intel data
+		bkmk_title = aCrude.raw_title
 		clean_data = process(aCrude, importID)
-		base_intel = basicIntel(clean_data, old_title, context) # not yet sure wheather we need it or not but still we do this from DRY
+		# not yet sure wheather we're gonna need it (or not) but still we
+		# derive it for the sake of DRY
+		base_intel = basicIntel(clean_data, bkmk_title, context)
 		try:
 			linkID = insertCleanData(clean_data)
 		except sqlite3.IntegrityError:
