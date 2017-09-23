@@ -139,7 +139,7 @@ def initNewImport(file_path):
 			timestamp = x[0]
 			humanTime = utils.humanizeTime(timestamp)
 			raise RuntimeError(f"File already imported on " \
-				"{timestamp}, i.e. {humanTime}"
+				"``{timestamp}``, i.e. {humanTime}"
 			)
 		else:
 			importID = cur.lastrowid
