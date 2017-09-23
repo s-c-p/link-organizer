@@ -1,3 +1,15 @@
+<!-- 
+	this is the app's landing page
+
+	fat header has 4 blocks which show the count and act as buttons for
+		view organized links
+		go to organize newly imported links
+		view error causing links
+		go to import new file page
+	below it is the tag cloud, you can view project cloud by selecting projects from the dropdown
+-->
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,30 +19,32 @@
 </head>
 <body>
 
-	<header>
-		<form action="import">
-			<input type="submit" name="Import">
-		</form>
-		<!--
-		<div class="search">
-			<input type="text" name="search" placeholder="Search">
-			<button class="simple search">Search</button>
-			<button class="simple advancedSearch">Advanced Search</button>
+
+	<header class="glance">
+		<div class="label organized">
+			<a href="">{{organized_count}} bookmarks organized</a>
 		</div>
-		-->
+
+		<div class="label pending">
+			<a href="">{{pending_count}} bookmarks to organize</a>
+		</div>
+
+		<div class="label errors">
+			<a href="">{{errors_count}} errors encountered when organizing bookmarks</a>
+		</div>
+
+		<div class="label import">
+			<a href="/import">Import a new file into the database</a>
+		</div>
 	</header>
 
-	<div class="report">
-		<div class="organized">
-			<a href="viewer">{{1437}} bookmarks organized</a>
-		</div>
-		<div class="pending">
-			<a href="organize">{{10}} bookmarks to organize</a>
-		</div>
-		<div class="errors">
-			<a href="errors">{{2}} errors encountered when organizing bookmarks</a>
-		</div>
-	</div>
+	<content>
+		<select>
+			<option value="tags" >tags</option>
+			<option value="projects">projects</option>
+		</select>
+		<div class="cloud"></div>
+	</content>
 
 	<footer>
 		About
