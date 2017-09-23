@@ -34,10 +34,11 @@ class Link(object):
 	further illustrated by ``stackoverflow.com/q/390250/``, reason why I did
 	not define an internal equality calculator
 	"""
-	def __init__(self, url, title, safeForWork, date_created,
+	def __init__(self, url, title, snowden, safeForWork, date_created,
 		state_, import_):
 		self.url = url
 		self.title = title
+		self.snowden = snowden
 		self.safeForWork = safeForWork
 		self.date_created = date_created
 		self.state_ = state_
@@ -51,11 +52,12 @@ class Link(object):
 		with sqliteDB(dbFile) as cur:
 			cur.execute(
 				"INSERT INTO links "						\
-				"(url, title, safeForWork, date_created, "	\
-				"state_id, import_id) "						\
-				"VALUES (?,?,?,?,?,?)",
-				[self.url, self.title, self.safeForWork, self.date_created,
-				utlty_deENUMfunc(self.state_), self.import_]
+				"(url, title, snowden, safeForWork, "		\
+				"date_created, state_id, import_id) "		\
+				"VALUES (?,?,?,?,?,?,?)",
+				[self.url, self.title, self.snowden, self.safeForWork,
+				self.date_created, utlty_deENUMfunc(self.state_),
+				self.import_]
 			)
 			linkID = cur.lastrowid
 		return linkID
@@ -68,9 +70,10 @@ class Link(object):
 		"""
 		with sqliteDB(dbFile) as cur:
 			x = cur.execute(
-				"SELECT "							\
-				"linkID, url, title, safeForWork, "	\
-				"date_created, state_id, import_id "\
+				"SELECT "						\
+				"linkID, url, title, snowden, "	\
+				"safeForWork, date_created, "	\
+				"state_id, import_id "			\
 				"FROM links WHERE url=?", [url]
 			)
 			x = x.fetchone()
@@ -95,13 +98,14 @@ class Link(object):
 				"SET " 					\
 				"	url=?, " 			\
 				"	title=?, " 			\
+				"	snowden=?, "	 	\
 				"	safeForWork=?, " 	\
 				"	date_created=?, " 	\
 				"	state_id=?, " 		\
 				"	import_id=? " 		\
 				"WHERE " 				\
 				"	linkID=?;"
-				[idol.url, idol.title, idol.safeForWork,
+				[idol.url, idol.title, idol.snowden, idol.safeForWork,
 				idol.date_created, idol.state_id, idol.import_id,
 				targetID]
 			)
@@ -153,10 +157,11 @@ def process(crude_data, importID):
 	top = utils.partialDownload(1024)
 	# TODO: this needs to be async
 	title = BeautifulSoup(top).find_all("title")[0].get_text()
+	snowden = False
 	safeForWork = NotImplemented
 	date_created = crude_data.raw_add_date
 	return Link(
-		url, title, safeForWork, date_created, state_, import_
+		url, title, snowden, safeForWork, date_created, state_, import_
 	)
 
 def basicIntel(clean_data, bkmk_title, context):
@@ -212,6 +217,8 @@ def advancedIntel(oldData, newData):
 	if newData.title != oldData.title:
 		final.title = newData.title
 		info4intel.append(oldData.title)
+	if newData.snowden != oldData.snowden:
+		final.snowden = newData.snowden
 	if newData.safeForWork != oldData.safeForWork:
 		final.safeForWork = newData.safeForWork
 	# TODO

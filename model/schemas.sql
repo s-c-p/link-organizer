@@ -58,6 +58,7 @@ CREATE TABLE links
 ( linkID INTEGER PRIMARY KEY AUTOINCREMENT
 , url TEXT NOT NULL
 , title TEXT NOT NULL
+, snowden BOOLEAN
 , safeForWork BOOLEAN
 , date_created TIMESTAMP
 , state_id INTEGER
