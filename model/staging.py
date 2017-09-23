@@ -25,14 +25,87 @@ import utils
 
 # constants and data structs--------------------------------------------------
 
-Clean = namedtuple("Clean",
-	[ "url"
-	, "title"
-	, "safeForWork"
-	, "date_created"
-	, "state_"
-	, "import_"])
+class Link(object):
+	""" although Link data struct needs nothing more than to be a C struct,
+	but I left the simplicity of collections.namedtuple to provide API for 
+	database operations C(save)R(getDetailsByURL)U(update)D(not-applicable)
+	And thats it, I have not defined any other methods because i wanna stick
+	to functional programming and avoid OOP as much as possible, which is
+	further illustrated by ``stackoverflow.com/q/390250/``, reason why I did
+	not define an internal equality calculator
+	"""
+	def __init__(self, url, title, safeForWork, date_created,
+		state_, import_):
+		self.url = url
+		self.title = title
+		self.safeForWork = safeForWork
+		self.date_created = date_created
+		self.state_ = state_
+		self.import_ = import_
+		return
 
+	def save(self):
+		""" save itself in the database and return the reference key """
+		# search `sqlite3 namedtuple` and look at 
+		# http://peter-hoffmann.com/2010/python-sqlite-namedtuple-factory.html
+		with sqliteDB(dbFile) as cur:
+			cur.execute(
+				"INSERT INTO links "						\
+				"(url, title, safeForWork, date_created, "	\
+				"state_id, import_id) "						\
+				"VALUES (?,?,?,?,?,?)",
+				[self.url, self.title, self.safeForWork, self.date_created,
+				utlty_deENUMfunc(self.state_), self.import_]
+			)
+			linkID = cur.lastrowid
+		return linkID
+
+	@staticmethod
+	def getDetailsByURL(self, url):
+		""" fetch all information from DB of a link based solely on any
+		arbitrary url and not bound by the instance/object on which it is
+		called and hence this is a ``staticmethod``
+		"""
+		with sqliteDB(dbFile) as cur:
+			x = cur.execute(
+				"SELECT "							\
+				"linkID, url, title, safeForWork, "	\
+				"date_created, state_id, import_id "\
+				"FROM links WHERE url=?", [url]
+			)
+			x = x.fetchone()
+		linkID = x[0]
+		params = x[1:]
+		ans = Link(*params)
+		assert type(ans.import_id) is int
+		return linkID, ans
+
+	@staticmethod
+	def update(self, targetID, idol):
+		""" update...
+		the only reason I am taking targetID as a parameter is because it is
+		already available where its gonna be needed, provided by other
+		functions and we can avoid a new database read operation, IDEALLY
+		though it should be Link.update(old, new) --> and the func derives
+		targetID from ``old``
+		"""
+		with sqliteDB(dbFile) as cur:
+			cur.execute(
+				"UPDATE links " 		\
+				"SET " 					\
+				"	url=?, " 			\
+				"	title=?, " 			\
+				"	safeForWork=?, " 	\
+				"	date_created=?, " 	\
+				"	state_id=?, " 		\
+				"	import_id=? " 		\
+				"WHERE " 				\
+				"	linkID=?;"
+				[idol.url, idol.title, idol.safeForWork,
+				idol.date_created, idol.state_id, idol.import_id,
+				targetID]
+			)
+		return
 
 
 # functions-------------------------------------------------------------------
@@ -63,7 +136,11 @@ def initNewImport(file_path):
 				"SELECT ts_on_zAxis FROM imports WHERE hash=?", [hashVal]
 			)
 			x = x.fetchall()[0]
-			raise RuntimeError("File already imported on {0}".format(x[0]))
+			timestamp = x[0]
+			humanTime = utils.humanizeTime(timestamp)
+			raise RuntimeError(f"File already imported on " \
+				"{timestamp}, i.e. {humanTime}"
+			)
 		else:
 			importID = cur.lastrowid
 	return importID
@@ -78,28 +155,9 @@ def process(crude_data, importID):
 	title = BeautifulSoup(top).find_all("title")[0].get_text()
 	safeForWork = NotImplemented
 	date_created = crude_data.raw_add_date
-	return Clean._make(
-		[url, title, safeForWork, date_created, state_, import_]
+	return Link(
+		url, title, safeForWork, date_created, state_, import_
 	)
-
-def insertCleanData(clean_data):
-	url = clean_data.url
-	title = clean_data.title
-	state_id = utlty_deENUMfunc(clean_data.state_)
-	import_id = clean_data.import_
-	safeForWork = clean_data.safeForWork
-	date_created = clean_data.date_created
-	# search `sqlite3 namedtuple` and look at 
-	# http://peter-hoffmann.com/2010/python-sqlite-namedtuple-factory.html
-	with sqliteDB(dbFile) as cur:
-		cur.execute(
-			"INSERT INTO links "											\
-			"(url, title, safeForWork, date_created, state_id, import_id) "	\
-			"VALUES (?,?,?,?,?,?)",
-			[url, title, safeForWork, date_created, state_id, import_id]
-		)
-		linkID = cur.lastrowid
-	return linkID
 
 def basicIntel(clean_data, bkmk_title, context):
 	info4intel = context
@@ -160,32 +218,37 @@ def advancedIntel(oldData, newData):
 	# if newData.state_ != oldData.state_:
 	return final, info4intel
 
-def updateLinkDetails(linkID, clean_data):
-	with sqliteDB(dbFile) as cur:
-		cur.execute(
-			"UPDATE links " 		\
-			"SET " 					\
-			"	url=?, " 			\
-			"	title=?, " 			\
-			"	safeForWork=?, " 	\
-			"	date_created=?, " 	\
-			"	state_id=?, " 		\
-			"	import_id=? " 		\
-			"WHERE " 				\
-			"	linkID=?;"
-			[url, title, safeForWork, date_created, state_id, import_id, \
-			linkID]
-		)
-		linkID = cur.lastrowid
-	return
+def utlty_deENUMfunc(state):
+	ans = 2
+	# NOTE: why hardcoded? because we can read from DB but the
+	# value is gonna be constant so hardcoded
+	return ans
+
+def areLinksEqual(linkA, linkB):
+	try:
+		assert isinstance(linkA, Link)
+	except AssertionError:
+		return False
+	else:
+		# why not using linkA.__dict__ == linkB.__dict__?
+		# see ``stackoverflow.com/q/390250/``
+		ans = \
+		linkA.url == linkB.url and \
+		linkA.title == linkB.title and \
+		linkA.state_ == linkB.state_ and \
+		linkA.import_ == linkB.import_ and \
+		linkA.safeForWork == linkB.safeForWork and \
+		linkA.date_created == linkB.date_created
+	return ans
 
 def insertIntel(linkID, timestamp, infoSet):
 	with sqliteDB(dbFile) as cur:
 		for piece in infoSet:
 			cur.execute(
-				"INSERT INTO intel "\
+				"INSERT INTO intel "					\
 				"(FK_linkID, information, ts_on_zAxis) "\
-				"VALUES (?,?,?)", [linkID, str(piece), timestamp]
+				"VALUES (?,?,?)",
+				[linkID, str(piece), timestamp]
 			)
 	return
 
@@ -201,15 +264,15 @@ def stage(file_path, raw_data):
 		# derive it for the sake of DRY
 		base_intel = basicIntel(clean_data, bkmk_title, context)
 		try:
-			linkID = insertCleanData(clean_data)
+			linkID = clean_data.save()
 		except sqlite3.IntegrityError:
 			# => url already exists, time to increase intel
 			newData = clean_data
-			linkID, oldData = utlty_getOldLink(newData.url)
+			linkID, oldData = Link.getDetailsByURL(newData.url)
 			final, diff_intel = advancedIntel(oldData, newData)
 			# NOTE: newData.import_ == oldData.import_ will never happen under
 			# normal flow of control
-			if final == oldData:
+			if areLinksEqual(final, oldData):
 				# this is the case of incremental import_
 				# no updation of link's attributes and no new intel if found
 				pass
@@ -217,30 +280,10 @@ def stage(file_path, raw_data):
 				# same link was stored on 2 different systems/locations and
 				# probably has different comments/tags/etc. which can give
 				# helpful information
+				Link.update(linkID, final)
 				insertIntel(linkID, timestamp, base_intel)
 				insertIntel(linkID, timestamp, diff_intel)
-				updateLinkDetails(linkID, final)
 		else:
 			# Link is definately new & hence intel is new
 			insertIntel(linkID, timestamp, base_intel)
 	return
-
-def utlty_getOldLink(url):
-	with sqliteDB(dbFile) as cur:
-		x = cur.execute(
-			"SELECT "							\
-			"linkID, url, title, safeForWork, "	\
-			"date_created, state_id, import_id "\
-			"FROM links WHERE url=?", [url]
-		)
-		x = x.fetchone()
-	ans = Clean(x[1:])
-	linkID = x[0]
-	assert type(ans.import_id) is int
-	return ans
-
-def utlty_deENUMfunc(state):
-	ans = 2
-	# NOTE: why hardcoded? because we can read from DB but the
-	# value is gonna be constant so hardcoded
-	return ans
