@@ -1,11 +1,5 @@
 <!-- 
-
 	select file, begin upload
-	if parsing successful
-		redirect to index.html
-	else
-		show error-message in top bar and remain on this page
-
 -->
 
 <!-- 
