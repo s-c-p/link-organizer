@@ -16,7 +16,6 @@ the purpose of this file is to
 import time
 import sqlite3
 from bs4 import BeautifulSoup
-from collections import namedtuple
 from contextlib import contextmanager
 
 import utils
@@ -116,10 +115,9 @@ class Link(object):
 
 @contextmanager
 def sqliteDB(file_name):
-	conn = sqlite3.connect(file_name)
-	yield conn.cursor()
-	conn.commit()
-	conn.close()
+	with sqlite3.connect(file_name) as conn:
+		yield conn.cursor()
+		conn.commit()
 	return
 
 def initNewImport(file_path):
@@ -142,8 +140,8 @@ def initNewImport(file_path):
 			x = x.fetchall()[0]
 			timestamp = x[0]
 			humanTime = utils.humanizeTime(timestamp)
-			raise RuntimeError(f"File already imported on " \
-				"``{timestamp}``, i.e. {humanTime}"
+			raise RuntimeError("File already imported on " \
+								f"``{timestamp}``, i.e. {humanTime}"
 			)
 		else:
 			importID = cur.lastrowid
@@ -271,11 +269,11 @@ def stage(file_path, raw_data):
 		# derive it for the sake of DRY
 		base_intel = basicIntel(clean_data, bkmk_title, context)
 		try:
-			linkID = clean_data.save()
+			new_linkID = clean_data.save()
 		except sqlite3.IntegrityError:
 			# => url already exists, time to increase intel
 			newData = clean_data
-			linkID, oldData = Link.getDetailsByURL(newData.url)
+			existing_linkID, oldData = Link.getDetailsByURL(newData.url)
 			final, diff_intel = advancedIntel(oldData, newData)
 			# NOTE: newData.import_ == oldData.import_ will never happen under
 			# normal flow of control
@@ -287,10 +285,10 @@ def stage(file_path, raw_data):
 				# same link was stored on 2 different systems/locations and
 				# probably has different comments/tags/etc. which can give
 				# helpful information
-				Link.update(linkID, final)
-				insertIntel(linkID, timestamp, base_intel)
-				insertIntel(linkID, timestamp, diff_intel)
+				Link.update(existing_linkID, final)
+				insertIntel(existing_linkID, timestamp, base_intel)
+				insertIntel(existing_linkID, timestamp, diff_intel)
 		else:
 			# Link is definately new & hence intel is new
-			insertIntel(linkID, timestamp, base_intel)
+			insertIntel(new_linkID, timestamp, base_intel)
 	return
