@@ -22,7 +22,7 @@ def view_links():
 	# isThisFirstPage
 	# pageNum
 	# table_body
-	curate(fetched_links, config)
+	curate(fetched_links, config) # NOTE: link is inactive if vpn-required==true, and to wikipedia's-porn page if sfw==false
 	return bottle.template("view/view_links")
 
 # organize links--------------------------------------------------------------

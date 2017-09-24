@@ -11,3 +11,6 @@ implement config (ideally update at each logout or custom click)
 cache
 	recent searches
 	search results of last search
+
+production
+	pure be delivered by real CDN not me
