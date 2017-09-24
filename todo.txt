@@ -1,6 +1,5 @@
 
 enable `computer` for info sake, completely independent of others
-write the main server
 can I have a backup branch
 
 implement config (ideally update at each logout or custom click)

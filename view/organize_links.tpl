@@ -1,8 +1,3 @@
-	if len(import_session) > 1
-		show import_session list
-	else
-		show organize_links?session=importID/itsTST
-
 	on the link organizer page, show explorer's-list-view-with-preview-on-right
 	the list shows clickable links, note that
 		link is inactive if vpn-required==true, and to wikipedia's-porn page if sfw==false
