@@ -1,4 +1,3 @@
-<!--
 	if len(import_session) > 1
 		show import_session list
 	else

@@ -1,3 +1,4 @@
+
 <!-- 
 	this is the app's landing page
 
@@ -21,14 +22,20 @@
 </head>
 <body>
 
+	<header>
+		Welcome
+		<a href="">Settings</a>
+		<a href="">Link Cache</a>
+		<!-- this is where your clicked-but-not-opened(cuzNSFWorVPN)-links-go -->
+	</header>
 
-	<header class="glance">
+	<div class="glance">
 		<div class="label organized">
-			<a href="">{{organized_count}} bookmarks organized</a>
+			<a href="/view_links">{{organized_count}} bookmarks organized</a>
 		</div>
 
 		<div class="label pending">
-			<a href="">{{pending_count}} bookmarks to organize</a>
+			<a href="/organize_links">{{pending_count}} bookmarks to organize</a>
 		</div>
 
 		<div class="label errors">
@@ -38,15 +45,15 @@
 		<div class="label import">
 			<a href="/view_import">Import a new file into the database</a>
 		</div>
-	</header>
+	</div>
 
-	<content>
+	<div>
 		<select>
 			<option value="tags" selected="selected">tags</option>
 			<option value="projects">projects</option>
 		</select>
 		<div class="cloud"></div>
-	</content>
+	</div>
 
 	<footer>
 		About

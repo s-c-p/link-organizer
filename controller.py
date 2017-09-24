@@ -9,22 +9,36 @@ def index():
 	# **** project_cloud
 	return bottle.template("view/index")
 
+# search----------------------------------------------------------------------
+
 @bottle.route("/search")
 def search():
 	return
 
-
-
+# view links------------------------------------------------------------------
 
 @bottle.route("/view_links")
 def view_links():
+	# isThisFirstPage
+	# pageNum
+	# table_body
+	curate(fetched_links, config)
+	return bottle.template("view/view_links")
+
+# organize links--------------------------------------------------------------
+
+@bottle.route("/organize_links")
+def organize_links():
+	if sessionID not in GET_request:
+		if len(import_sessions) > 1:
+			bottle.redirect("view/select_import_session")
+		else:
+			session = import_sessions[0]
+			bottle.redirect(f"view/organize_links?session={session}")
+	# obviously else
 	return
 
-
-
-
-
-
+# import wizard---------------------------------------------------------------
 
 @bottle.route("/import_wizard")
 def import_wizard():
@@ -46,6 +60,8 @@ def import_file():
 	else:
 		bottle.redirect(f"/import_wizard?err={err_msg}")
 	return
+
+# run-------------------------------------------------------------------------
 
 if __name__ == '__main__':
 	bottle.run(debug=True, reloader=True)

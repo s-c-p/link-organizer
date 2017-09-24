@@ -1,0 +1,14 @@
+
+enable `computer` for info sake, completely independent of others
+write the main server
+can I have a backup branch
+
+implement config (ideally update at each logout or custom click)
+	turn off/on familty mode
+	number of entries on a page (pagination)
+	db file
+	import sessions' timestamps
+
+cache
+	recent searches
+	search results of last search
