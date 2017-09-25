@@ -21,6 +21,8 @@ interfaces
 		[ ] q(@)
 		[ ] q(words of comment and/or title and/or url)
 
+Note that throughout the interface we observe a Link-Policy, underwhich nsfw/snowden marked links don't open in new tabs but rather you get a prompt
+
 
 future-- realtime ``tag suggestor`` based on title, comments
 

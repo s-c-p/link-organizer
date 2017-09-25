@@ -1,6 +1,3 @@
-	on the link organizer page, show explorer's-list-view-with-preview-on-right
-	the list shows clickable links, note that
-		link is inactive if vpn-required==true, and to wikipedia's-porn page if sfw==false
 	in the preview pane
 		the top most box is where you enter tags, it pushes others down if it needs to expand
 		the mid box shows related projects, it pushes others down if it needs to expand
@@ -14,7 +11,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>Organize recently imported links</title>
 	<link rel="stylesheet" href="static-reset.min.css">
 	<link rel="stylesheet" href="static-pure.min.css">

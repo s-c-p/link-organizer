@@ -1,5 +1,8 @@
 
+some way to group the links, in a sorted order;; or do I do this with a @project--modName
+
 enable `computer` for info sake, completely independent of others
+implement a link-cache page which catches and stores (for this session) the nsfw/snowden links that didn't open
 can I have a backup branch
 
 implement config (ideally update at each logout or custom click)
@@ -7,6 +10,7 @@ implement config (ideally update at each logout or custom click)
 	number of entries on a page (pagination)
 	db file
 	import sessions' timestamps
+	count store for index file
 
 cache
 	recent searches
