@@ -17,47 +17,59 @@
 	<link rel="stylesheet" href="static-pure.min.css">
 	<script type="text/javascript" src="static-umbrella.min.js"></script>
 	<style type="text/css">
-		body {overflow: hidden;}
-		content {
-			overflow:auto; position:absolute; top: 0px; left:0px; right:0px; bottom:0px;
-			display: flex;
-		}
-		.master {	flex: 0 0 65%; overflow: scroll;	}
-		.detail {	flex: 1; overflow: scroll;		}
+		/*body {overflow: hidden;}*/
+		content {overflow:auto; position:absolute; top: 0px; left:0px; right:0px; bottom:0px; display: flex;}
+		.master {background-color: red; overflow: scroll; flex: 0 0 60%;}
+		.detail {background-color: green; overflow: scroll; flex: 1;}
+		.save-on-enter {background-color: blue;}
+		.notes {background-color: pink;}
 	</style>
 </head>
 <body>
+<content>
 
-	<content>
+	<div class="master">
+		<table class="pure-table">
+		<tbody>
+		<!-- JS will insert rows here -->
+		</tbody>
+		</table>
+	</div>
 
-		<div class="master">
-			<table class="pure-table">
-				<tbody> <!-- JS magic happens here --> </tbody>
-			</table>
-		</div>
+	<div class="detail">
+		<div class="save-on-enter"></div>
+		<div class="notes"></div>
+	</div>
 
-		<div class="detail"> <!-- JS magic happens here --> </div>
-
-	</content>
-
+</content>
 </body>
 <script type="text/javascript">
-let DATA = {{json_data}};
+// the JSON database
+
+DATA = {{json_data}};
+
+// functions required to draw the master list---------------------------------
 
 let dict2row = function (dict) {
-	code = `<tr id="${dict.id}"><td>  <a href="${dict.url}">${dict.title}</a>  </td></tr>`;
+	code = `
+		<tr id="${dict.id}">
+			<td>    <a href="${dict.url}">${dict.title}</a>    </td>
+		</tr>
+	`;
 	u("table > tbody:last-child").append(code);
 	return 0;
-}
+};
 
-let json2table = function(jsonArr) {	jsonArr.map(dict2row)	};
+let json2table = function(jsonArr) {
+	jsonArr.map(dict2row)
+};
 
-json2table(DATA)
-</script>
-<script type="text/javascript">
+// functions required to draw the detail section------------------------------
+
 let show_details = function(object) {
 	// delete if findin was successful without any errors
 	u("div.detail").remove();
+	// derive all needed variable from object for the following template
 	template = `
 		tags
 		projects
@@ -65,15 +77,12 @@ let show_details = function(object) {
 		add-intel-btn
 		save-btn
 	`;
-	// // make a holder for html
-	// holder = "";
-	// // for key, value in dict: -- templateize
-	// Object.keys(object)
-	// 	.forEach( function (key) {
-	// 		holder+= '<div class="info"><dt>' + key + "</dt>		<dd>" + object[key] + "</dd></div>";
-	// });
-	u("div.detail").append(holder);
+	u("div.detail").append(template);
 };
+
+// now, the functions which execute as soon as the page is loaded
+
+json2table(DATA);
 
 u("tr")
 	.on("mouseover", function(e) {
@@ -85,10 +94,24 @@ u("tr")
 	.on("click", function(e) {
 		// find it first
 		html_id = u(e.currentTarget).attr("id");
-		// findIndex better than filter, which would scan the whole array even if the match was found
-		index = DATA.findIndex(function(dict){return dict.id==html_id});
+		// findIndex better than filter, which would scan the whole array even if
+		// a match was found
+		index = DATA.findIndex(function (dict) { return dict.id==html_id });
 		object = DATA[index];
 		show_details(object);
 	});
+// fetch(
+// 	new Request("http://127.0.0.1:8080/populate", {
+// 	method: 'GET',
+// 	mode: 'no-cors'
+// }))
+// .then(function (response) {
+// 	if (!response.ok) {
+// 		throw response.statusText
+// 	}
+// 	return response.json();
+// })
+// .then(jsonData => json2table(jsonData))
+// .catch(err => console.log(err));
 </script>
 </html>
