@@ -1,42 +1,83 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>Detail Editor</title>
+
 	<!-- <link rel="stylesheet" href="static-reset.min.css"> -->
+<!-- 
 	<link rel="stylesheet" href="static-pure.min.css">
 	<link rel="stylesheet" href="style.css">
+-->
 	<script type="text/javascript" src="static-umbrella.min.js"></script>
-	<script type="text/javascript" src="script.js"></script>
 </head>
-<body class="container">
+<body>
 
-	<div class="labels">
-		<div class="labels__tag">
-			<ul>
-				<li>better coding</li>
-				<li>python</li>
-				<li>sqlite3</li>
-			</ul>
-		</div>
-		<div class="labels__project">
-			<ul>
-				<li>codingSC</li>
-				<li>mission impossible 3</li>
-			</ul>
-		</div>
-	</div>
-
-	<input class="common-input" type="text" name="user_input" placeholder="#tag @project notes">
-
-	<div class="notes">
+	<div class="switch">
 		<ul>
-			<li class="notes__intel">my name is rocky bhaiya</li>
-			<li class="notes__intel">i was born in porbandar</li>
-			<li class="notes__intel">i was born on 1 january</li>
-			<li class="notes__intel">i am vegetarian but also drink milk</li>
-			<li class="notes__intel">i don;t like all the pollution these days</li>
+		<!-- abpetkov.github.io/switchery -->
+			<li>
+				<label>SFW</label>	<input type="checkbox" name="sfw" class="js-switch" checked>
+			</li>
+			<li>
+				<label>VPN</label>	<input type="checkbox" name="vpn" class="js-switch" checked>
+			</li>
 		</ul>
 	</div>
 
+	<div class="container">
+		<div class="labels">
+			<div class="labels__tag">
+				<ul>
+					<li>better coding</li>
+					<li>python</li>
+					<li>sqlite3</li>
+				</ul>
+			</div>
+			<div class="labels__project">
+				<ul>
+					<li>codingSC</li>
+					<li>mission impossible 3</li>
+				</ul>
+			</div>
+		</div>
+
+		<input class="common-input" type="text" name="user_input" placeholder="#tag @project notes">
+
+		<div class="notes">
+			<ul>
+				<li>my name is rocky bhaiya</li>
+				<li>i was born in porbandar</li>
+				<li>i was born on 1 january</li>
+				<li>i am vegetarian but also drink milk</li>
+				<li>i don;t like all the pollution these days</li>
+			</ul>
+		</div>
+	</div>
+
+
 </body>
+<script type="text/javascript">
+u(".common-input").on("keydown", function (e) {
+	console.log(e.which)
+	if (e.which == 13) {
+		let val = document.querySelector(".common-input").value;
+		let target = "";
+		switch (val[0]) {
+			case "#":
+				target = ".labels__tag ul li:last-child";
+				break;
+			case "@":
+				target = ".labels__project ul li:last-child";
+				break;
+			default:
+				target = ".notes ul li:last-child";
+				break;
+		}
+		let code = `<li>${val}</li>`
+		u(target).append(code);
+		document.querySelector(".common-input").value = "";
+	}
+});
+</script>
 </html>
