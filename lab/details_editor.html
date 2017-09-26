@@ -4,11 +4,9 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<title>Detail Editor</title>
 
-	<!-- <link rel="stylesheet" href="static-reset.min.css"> -->
-<!-- 
+	<link rel="stylesheet" href="static-reset.min.css">
 	<link rel="stylesheet" href="static-pure.min.css">
 	<link rel="stylesheet" href="style.css">
--->
 	<script type="text/javascript" src="static-umbrella.min.js"></script>
 </head>
 <body>
@@ -65,13 +63,13 @@ u(".common-input").on("keydown", function (e) {
 		let target = "";
 		switch (val[0]) {
 			case "#":
-				target = ".labels__tag ul li:last-child";
+				target = ".labels__tag ul:last-child";
 				break;
 			case "@":
-				target = ".labels__project ul li:last-child";
+				target = ".labels__project ul:last-child";
 				break;
 			default:
-				target = ".notes ul li:last-child";
+				target = ".notes ul:last-child";
 				break;
 		}
 		let code = `<li>${val}</li>`
