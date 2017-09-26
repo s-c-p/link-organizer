@@ -1,33 +1,51 @@
-.switch {
-
+body {
+	font-family: Arial,"Helvetica Neue",Helvetica,sans-serif;
 }
 
-.container{
-
+.labels {
+	/* all things here are labeled */
+	background-color: #E0EAF1;
+	margin: 0.4em;
 }
 
-.labels{
-
+.tags {
+	/* tags group */
+	padding: 0.4em;
 }
 
-.labels__tag{
-	background-color: ;
-	/*prepend #*/
+.a-tag {
+	/* tag's individual styling */
+	display: inline-block !important;
+/* 	background-color: #15b58a; */
+	background-color: pink;
+	font-size: 1.1em;
+	line-height: 1.1em;
+	margin: 0.2em 0.2em 0.2em 0;
+	padding: 0.2em 0.4em 0.2em 0.4em;
+	border-radius: 2.2em;
 }
 
-.labels__project{
-	background-color: ;
-	/*prepend @*/
+.projects {
+	/*  */
 }
 
-.common-input{
+.a-project {
+	/*  */
+}
 
+.common-input {
+	/* where you enter everything */
+	width: 90%;
+	margin: 0.4em;
+	margin-left: 0.9em;
 }
 
 .notes {
-
+	/*  */
 }
 
-.notes__intel {
-	/*border around li*/
+.a-note {
+	/* notes */
+	border: 2px solid #ddd;
+	border-collapse: collapse;
 }
