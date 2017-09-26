@@ -47,5 +47,10 @@ body {
 .a-note {
 	/* notes */
 	border: 2px solid #ddd;
-	border-collapse: collapse;
+	border-bottom: 0px;
+	padding: 0.4em;
+}
+
+.a-note:last-of-type {
+	border-bottom: 2px solid #ddd;
 }

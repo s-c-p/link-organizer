@@ -1,3 +1,5 @@
+make an update object as well (i.e. on e.which==13)
+provide delete buttons
 
 some way to group the links, in a sorted order;; or do I do this with a @project--modName
 
