@@ -13,6 +13,13 @@ def index():
 
 @bottle.route("/search")
 def search():
+	""" search is always incremental (at least in the curent setup)
+	i.e. && relation => incremental and || relation => 1stepBack and repeat
+		#tag
+		@project
+		(link-or-link-fragment)
+		comment, intel or title
+	"""
 	return
 
 # view links------------------------------------------------------------------

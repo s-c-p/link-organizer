@@ -19,4 +19,4 @@ cache
 	search results of last search
 
 production
-	pure be delivered by real CDN not me
+	libs like umbrella, pure, etc. be delivered by real CDN not me in production
