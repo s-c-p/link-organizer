@@ -28,7 +28,7 @@ u(".common-input").on("keydown", function (e) {
 });
 
 u("#clear_all").on("click", function (e) {
-	alert("clearing all");
+	u("#details_editor").remove()
 });
 
 u("#save_details").on("click", function (e) {
