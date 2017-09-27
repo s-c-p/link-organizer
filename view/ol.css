@@ -2,23 +2,19 @@ body {
 	font-family: Arial,"Helvetica Neue",Helvetica,sans-serif;
 }
 
+content {
+	overflow:auto; position:absolute; top: 0px; left:0px; right:0px; bottom:0px; display: flex;
+}
 
+.master {
+	overflow: scroll;
+	flex: 0 0 70%;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.detail {
+	overflow: scroll;
+	flex: 1;
+}
 
 
 
