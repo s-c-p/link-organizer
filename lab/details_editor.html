@@ -11,17 +11,17 @@
 
 	<script type="text/javascript" src="static-umbrella.min.js"></script>
 </head>
-<body id="details_editor">
-
+<body>
+<div class="details_editor">
 <input id=clear_all type=button name=clear_all>
 <input id=save_details type=submit name=save_details> <!-- form=link_details> -->
 
 <!-- <form id=link_details method="POST"> -->
-<div id=link_details>
-	<input id=sfw  name=sfw type=checkbox checked=false>
+<form id=link_details>
+	<input id=sfw  name=sfw type=checkbox >
 	<label for=sfw>is this link Safe For Workplace</label>
 	<br>
-	<input id=vpn  name=vpn type=checkbox checked=true>
+	<input id=vpn  name=vpn type=checkbox checked>
 	<label for=vpn>should this link be hidden from ISP and other watchers?</label>
 
 	<div class=labels>
@@ -45,9 +45,9 @@
 		<li class=a-note>i am vegetarian but also drink milk</li>
 		<li class=a-note>i don;t like all the pollution these days</li>
 	</ul>
+</form>
+
 </div>
-
-
 </body>
 	<script type="text/javascript" src="script.js"></script>
 </html>
