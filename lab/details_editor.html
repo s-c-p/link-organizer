@@ -2,21 +2,23 @@
 <html>
 <head>
 	<meta http-equiv=Content-Type content="text/html; charset=utf-8" />
+
 	<title>Detail Editor</title>
 
 	<link rel=stylesheet href="static-reset.min.css">
 	<link rel=stylesheet href="static-pure.min.css">
 	<link rel=stylesheet href="details_editor.css">
+
 	<script type="text/javascript" src="static-umbrella.min.js"></script>
 </head>
 <body>
 
-		<!-- abpetkov.github.io/switchery -->
-	<label for=sfw>SFW</label>
-	<input id=sfw  name=sfw type=checkbox class=js-switch checked>
+<form>
+	<input id=sfw  name=sfw type=checkbox>
+	<label for=sfw>is this link Safe For Workplace</label>
 	<br>
-	<label for=vpn>VPN</label>
-	<input id=vpn  name=vpn type=checkbox class=js-switch checked>
+	<input id=vpn  name=vpn type=checkbox checked>
+	<label for=vpn>should this link be hidden from ISP and other watchers?</label>
 
 	<div class=labels>
 		<ul class=tags>
@@ -39,33 +41,9 @@
 		<li class=a-note>i am vegetarian but also drink milk</li>
 		<li class=a-note>i don;t like all the pollution these days</li>
 	</ul>
+</form>
 
 
 </body>
-<script type="text/javascript">
-u(".common-input").on("keydown", function (e) {
-	if (e.which == 13) {
-		let val = document.querySelector(".common-input").value;
-		let code = "";
-		let target = "";
-		switch (val[0]) {
-			case "#":
-				code = "<li class=a-tag>" + val;
-				target = ".tags";
-				break;
-			case "@":
-				code = "<li class=a-project>" + val;
-				target = ".projects";
-				break;
-			default:
-				code = "<li class=a-note>" + val;
-				target = ".notes";
-				break;
-		}
-		code += "</li>";
-		u(target).append(code);
-		document.querySelector(".common-input").value = "";
-	}
-});
-</script>
+	<script type="text/javascript" src="script.js"></script>
 </html>
