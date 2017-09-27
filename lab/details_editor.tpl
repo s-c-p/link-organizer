@@ -22,6 +22,20 @@
 </form>
 
 <script type="text/javascript">
+	let babe = 0;	// null
+	u("tr").on("click", function(e){
+		target = u(e.currentTarget).attr("id");
+		if (babe) {
+			if (babe.hasChanged) {
+				ans = yes_no_prompt(`save changes you just made to "${babe.title}"?`);
+				if (ans === 1) {
+					u.async(babe, "/save");
+				}
+			}
+			babe = 0;
+		}
+		babe = DATA[DATA.findIndex(function (dict) { return dict.id==target })]
+	});
 	draw(details);
 	u.on(keypress)...;	// track UI && data changes both
 	onSubmitButtonClick(send update data to server);
