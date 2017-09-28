@@ -1,5 +1,20 @@
+/*
+Nephritis		#27ae60;
+Peter River		#3498db;
+Belize Hole		#2980b9;
+Turquoise		#1abc9c;
+Green Sea		#16a085;
+Emerald			#2ecc71;
+danger 			#e74c3c;
+danger			#c0392b;
+buttons			#8e44ad;
+buttons			#2c3e50;
+buttons			#ecf0f1;
+*/
+
 body {
 	font-family: Arial,"Helvetica Neue",Helvetica,sans-serif;
+	background-color: #ecf0f1;
 }
 
 content {
@@ -31,7 +46,6 @@ content {
 
 .labels {
 	/* all things here are labeled */
-	background-color: #E0EAF1;
 	margin: 0.4em;
 }
 
@@ -62,12 +76,12 @@ content {
 
 .a-tag {
 	/* tag's individual styling */
-	background-color: teal;
+	background-color: turquoise;
 }
 
 .a-project {
 	/* project's individual styling */
-	background-color: aqua;
+	background-color: #3498db;
 }
 
 .a-note {

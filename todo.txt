@@ -1,11 +1,11 @@
-make an update object as well (i.e. on e.which==13)
-provide delete buttons
+ux
+	some way to group the links, in a sorted order;; or do I do this with a #tag--modName
 
-some way to group the links, in a sorted order;; or do I do this with a @project--modName
+db
+	enable `computer` for info sake, completely independent of others
 
-enable `computer` for info sake, completely independent of others
-implement a link-cache page which catches and stores (for this session) the nsfw/snowden links that didn't open
-can I have a backup branch
+routing
+	implement a link-cache page which catches and stores (for this session) the nsfw/snowden links that didn't open
 
 implement config (ideally update at each logout or custom click)
 	turn off/on familty mode

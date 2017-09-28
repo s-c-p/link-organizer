@@ -189,7 +189,7 @@ json2table(DATA);
 
 u("tr")
 	.on("mouseover", function(e) {
-		u(e.currentTarget).attr("style", "background-color: aquamarine;")
+		u(e.currentTarget).attr("style", "background-color: #2ecc71;")
 	})
 	.on("mouseout", function(e) {
 		u(e.currentTarget).attr("style", 'background-color: "";')
