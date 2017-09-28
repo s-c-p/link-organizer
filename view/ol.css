@@ -87,3 +87,8 @@ content {
 	margin: 0.4em;
 	margin-left: 0.9em;
 }
+
+li[class^=a-]:hover::after {
+	content: " x ";
+	/*content: "<a onclick='this.parentNode.removeChild(this);'>X</a>";*/
+}

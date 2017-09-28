@@ -171,6 +171,10 @@ let show_details = function(object) {
 		for (i=0; i<z.length; i++) {ans.notes.push(z[i].innerText);}
 		console.log(ans);
 	});
+	// activate delete button, bit.ly/2k4OWFf
+	u("li[class^=a-]").on("click", function (e) {
+			this.parentNode.removeChild(this);
+	});
 };
 
 
