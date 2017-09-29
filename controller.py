@@ -1,5 +1,13 @@
 import bottle
 
+# static files----------------------------------------------------------------
+
+@bottle.route("/view/static/<file_name>")
+def server_static(file_name):
+	return bottle.static_file(file_name, root="./view/static/")
+
+# home page-------------------------------------------------------------------
+
 @bottle.route("/")
 def index():
 	# organized_count

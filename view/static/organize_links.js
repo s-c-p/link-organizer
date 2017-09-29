@@ -48,30 +48,6 @@ details_editor.push(
 '</div>'
 );
 
-// fetch(
-// 	new Request("http://127.0.0.1:8080/populate", {
-// 	method: 'GET',
-// 	mode: 'no-cors'
-// }))
-// .then(function (response) {
-// 	if (!response.ok) {
-// 		throw response.statusText
-// 	}
-// 	return response.json();
-// })
-// .then(jsonData => json2table(jsonData))
-// .catch(err => console.log(err));
-// the JSON database
-// DATA = {{json_data}};
-DATA = 
-[ {id: 1, url: "http://example.com", swf: true, vpn: false, title: "Does it really matter", tags: ["a", "b", "c"], projects: ["xx", "yy", "zz"], notes: ['id: 1', 'url: "http://example.com"', 'swf: true, vpn: false']}
-, {id: 2, url: "http://example.com", swf: true, vpn: false, title: "I think it does", tags: ["a", "b", "c"], projects: ["xx", "yy", "zz"], notes: ['id: 2', 'url: "http://example.com"', 'swf: true, vpn: false']}
-, {id: 3, url: "http://example.com", swf: true, vpn: false, title: "But who cares? Civil Law", tags: ["a", "b", "c"], projects: ["xx", "yy", "zz"], notes: ['id: 3', 'url: "http://example.com"', 'swf: true, vpn: false']}
-, {id: 4, url: "http://example.com", swf: true, vpn: false, title: "The hitchhickers guide to galaxy", tags: ["a", "b", "c"], projects: ["xx", "yy", "zz"], notes: ['id: 4', 'url: "http://example.com"', 'swf: true, vpn: false']}
-, {id: 5, url: "http://example.com", swf: true, vpn: false, title: "Trillian = Tricia MacMillan", tags: ["a", "b", "c"], projects: ["xx", "yy", "zz"], notes: ['id: 5', 'url: "http://example.com"', 'swf: true, vpn: false']}
-, {id: 6, url: "http://example.com", swf: true, vpn: false, title: "Zaphod Beelebrox was an idiot", tags: ["a", "b", "c"], projects: ["xx", "yy", "zz"], notes: ['id: 6', 'url: "http://example.com"', 'swf: true, vpn: false']}
-, {id: 7, url: "http://example.com", swf: true, vpn: false, title: "Benji mouse, I wanna be like him", tags: ["a", "b", "c"], projects: ["xx", "yy", "zz"], notes: ['id: 7', 'url: "http://example.com"', 'swf: true, vpn: false']}];
-
 // functions required to draw the master list---------------------------------
 
 let dict2row = function (dict) {
@@ -156,7 +132,7 @@ let show_details = function(object) {
 	// activate submit
 	u("#save_details").on("click", function (e) {
 		let i = 0;
-		let ans = {};	// as opposed to Object
+		let ans = {};	// as opposed to Object(), best practice
 		ans.id = document.querySelector(".expendable-body").id;
 		ans.sfw = document.getElementById("sfw").checked;
 		ans.vpn = document.getElementById("vpn").checked;
@@ -169,6 +145,7 @@ let show_details = function(object) {
 		let z = document.querySelectorAll(".a-note");
 		ans.notes = [];
 		for (i=0; i<z.length; i++) {ans.notes.push(z[i].innerText);}
+		// TODO: change this
 		console.log(ans);
 	});
 	// activate delete button, bit.ly/2k4OWFf
@@ -185,7 +162,19 @@ let show_details = function(object) {
 
 // now, the functions which execute as soon as the page is loaded
 
-json2table(DATA);
+fetch(
+	new Request("http://127.0.0.1:8080/populate", {
+	method: 'GET',
+	mode: 'no-cors'
+}))
+.then(function (response) {
+	if (!response.ok) {
+		throw response.statusText
+	}
+	return response.json();
+})
+.then(jsonData => json2table(jsonData))
+.catch(err => console.log(err));
 
 u("tr")
 	.on("mouseover", function(e) {
