@@ -51,7 +51,6 @@ def organize_links():
 			session = import_sessions[0]
 			bottle.redirect(f"view/organize_links?session={session}")
 	# obviously else
-	
 	return
 
 # import wizard---------------------------------------------------------------

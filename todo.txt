@@ -1,3 +1,5 @@
+implement a curator in server itself
+
 ux
 	some way to group the links, in a sorted order;; or do I do this with a #tag--modName
 
