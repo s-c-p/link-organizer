@@ -1,6 +1,10 @@
-// stackoverflow.com/q/610406/
+let BASE_URL = "http://127.0.0.1:8080";
+
+// borrowed from outer world -------------------------------------------------
+
 String.prototype.formatUnicorn = String.prototype.formatUnicorn ||
 function () {
+	// stackoverflow.com/q/610406/
 	"use strict";
 	var str = this.toString();
 	if (arguments.length) {
@@ -16,7 +20,7 @@ function () {
 	return str;
 };
 
-// templates
+// templates -----------------------------------------------------------------
 
 let details_editor = [];
 details_editor.push(
@@ -31,25 +35,30 @@ details_editor.push(
 '	<label for=vpn>should this link be hidden from ISP and other watchers?</label>' +
 '	<div class=labels>' +
 '		<ul class=tags>'
-);	// <li class=a-tag>${}</li>
+);			// <li class=a-tag>${}</li>
 details_editor.push(
 '		</ul>' +
 '		<ul class=projects>'
-);	// <li class=a-project>${}</li>
+);			// <li class=a-project>${}</li>
 details_editor.push(
 '		</ul>' +
 '	</div>' +
 '	<input class=common-input type=text name=user_input placeholder="#tag @project notes">' +
 '	<ul class=notes>'
-);	// <li class=a-note>${}</li>
+);			// <li class=a-note>${}</li>
 details_editor.push(
 '	</ul>' +
 '</div>' +
 '</div>'
 );
 
-// functions required to draw the master list---------------------------------
+// functions -----------------------------------------------------------------
 
+/**
+ * takes a JS object and draws a clickable row, form the single-y function to
+ * be used with json2table as-in Array.map
+ * @param {*object} dict a js object containing all details related to a link
+ */
 let dict2row = function (dict) {
 	code = `
 		<tr id="${dict.id}">
@@ -60,17 +69,26 @@ let dict2row = function (dict) {
 	return 0;
 };
 
+/**
+ * required to draw the master list
+ * @param {*Array} jsonArr the array of links returned by server
+ */
 let json2table = function(jsonArr) {
 	jsonArr.map(dict2row)
 };
 
-// functions required to draw the detail section------------------------------
-
+/**
+ * required to draw the detail section of the master-detail view, this
+ * function also activates the necessary event listners because I don't
+ * know how to activate them ass soon as they come into existance, making
+ * those event listeners global doesn't work
+ * @param {*Object} object the entire link's details in a single variable
+ */
 let show_details = function(object) {
 	let i = 0;
 	let link_id = object.id;
-	let link_sfw = "checked" ? object.swf : "";
-	let link_vpn = "" ? object.vpn : "checked";
+	let link_sfw = "" ? object.swf : "checked";
+	let link_vpn = "checked" ? object.vpn : "";
 	let tagString = "";
 	for (i=0; i<object.tags.length; i++) {
 		tagString += `<li class=a-tag>${object.tags[i]}</li>`;
@@ -138,32 +156,36 @@ let show_details = function(object) {
 		ans.vpn = document.getElementById("vpn").checked;
 		let x = document.querySelectorAll(".a-tag");
 		ans.tags = [];
-		for (i=0; i<x.length; i++) {ans.tags.push(x[i].innerText);}
+		for (i=0; i<x.length; i++) {
+			ans.tags.push(x[i].innerText);
+		}
 		let y = document.querySelectorAll(".a-project");
 		ans.projects = [];
-		for (i=0; i<y.length; i++) {ans.projects.push(y[i].innerText);}
+		for (i=0; i<y.length; i++) {
+			ans.projects.push(y[i].innerText);
+		}
 		let z = document.querySelectorAll(".a-note");
 		ans.notes = [];
-		for (i=0; i<z.length; i++) {ans.notes.push(z[i].innerText);}
+		for (i=0; i<z.length; i++) {
+			ans.notes.push(z[i].innerText);
+		}
 		// TODO: change this
 		console.log(ans);
 	});
 	// activate delete button, bit.ly/2k4OWFf
 	u("li[class^=a-]").on("click", function (e) {
-			this.parentNode.removeChild(this);
+		// the looks part i.e. show delete button on hover
+		// is handled by CSS
+		this.parentNode.removeChild(this);
 	});
 };
 
+// finally, the functions which execute as soon as the page is loaded---------
 
-
-
-
-
-
-// now, the functions which execute as soon as the page is loaded
+let data = [];
 
 fetch(
-	new Request("http://127.0.0.1:8080/populate", {
+	new Request(BASE_URL + "/populate", {
 	method: 'GET',
 	mode: 'no-cors'
 }))
@@ -173,25 +195,25 @@ fetch(
 	}
 	return response.json();
 })
-.then(function (jsonData) {
-	DATA = jsonData;
-	json2table(DATA);
+.then(function (jsondata) {
+	data = jsondata;	// so that downloaded 'data' can be used later
+	json2table(data);
 })
 .catch(err => console.log(err));
 
 u("tr")
-	.on("mouseover", function(e) {
-		u(e.currentTarget).attr("style", "background-color: #2ecc71;")
-	})
-	.on("mouseout", function(e) {
-		u(e.currentTarget).attr("style", 'background-color: "";')
-	})
-	.on("click", function(e) {
-		// find it first
-		html_id = u(e.currentTarget).attr("id");
-		// findIndex better than filter, which would scan the whole array even if
-		// a match was found
-		index = DATA.findIndex(function (dict) { return dict.id==html_id });
-		object = DATA[index];
-		show_details(object);
-	});
+.on("mouseover", function(e) {
+	u(e.currentTarget).attr("style", "background-color: #2ecc71;")
+})
+.on("mouseout", function(e) {
+	u(e.currentTarget).attr("style", 'background-color: "";')
+})
+.on("click", function(e) {
+	// find it first
+	html_id = u(e.currentTarget).attr("id");
+	// ``findIndex`` is better than ``filter``, because the later would scan
+	// the whole array even after a match was found, thus wasting time,money
+	index = data.findIndex(function (dict) { return dict.id===html_id });
+	object = data[index];
+	show_details(object);
+});
