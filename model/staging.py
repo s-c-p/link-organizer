@@ -47,7 +47,7 @@ class Link(object):
 	def save(self):
 		""" save itself in the database and return the reference key """
 		# search `sqlite3 namedtuple` and look at 
-		# http://peter-hoffmann.com/2010/python-sqlite-namedtuple-factory.html
+		# peter-hoffmann.com/2010/python-sqlite-namedtuple-factory.html
 		with sqliteDB(dbFile) as cur:
 			cur.execute(
 				"INSERT INTO links "						\

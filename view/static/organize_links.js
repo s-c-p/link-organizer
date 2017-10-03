@@ -24,10 +24,10 @@ details_editor.push(
 '<input id=clear_all type=button name=clear_all>' +
 '<input id=save_details type=submit name=save_details>' +
 '<div id=link_details>' +
-'	<input id=sfw  name=sfw type=checkbox {checked_if_sfw}>' +
+'	<input id=sfw  name=sfw type=checkbox {link_sfw}>' +
 '	<label for=sfw>is this link Safe For Workplace</label>' +
 '	<br>' +
-'	<input id=vpn  name=vpn type=checkbox {checked_if_not_vpn}>' +
+'	<input id=vpn  name=vpn type=checkbox {link_vpn}>' +
 '	<label for=vpn>should this link be hidden from ISP and other watchers?</label>' +
 '	<div class=labels>' +
 '		<ul class=tags>'
@@ -69,27 +69,27 @@ let json2table = function(jsonArr) {
 let show_details = function(object) {
 	let i = 0;
 	let link_id = object.id;
-	let checked_if_sfw = "checked" ? object.swf : "";
-	let checked_if_not_vpn = "" ? object.vpn : "checked";
-	let tagString= "";
+	let link_sfw = "checked" ? object.swf : "";
+	let link_vpn = "" ? object.vpn : "checked";
+	let tagString = "";
 	for (i=0; i<object.tags.length; i++) {
-		tagString+= `<li class=a-tag>${object.tags[i]}</li>`;
+		tagString += `<li class=a-tag>${object.tags[i]}</li>`;
 	};
-	let projectString= "";
+	let projectString = "";
 	for (i=0; i<object.projects.length; i++) {
-		projectString+= `<li class=a-project>${object.projects[i]}</li>`;
+		projectString += `<li class=a-project>${object.projects[i]}</li>`;
 	};
-	let noteString= "";
+	let noteString = "";
 	for (i=0; i<object.notes.length; i++) {
-		noteString+= `<li class=a-note>${object.notes[i]}</li>`;
+		noteString += `<li class=a-note>${object.notes[i]}</li>`;
 	};
 	// delete if findin was successful without any errors
 	u(".expendable-body").remove();
 	// build the final
 	final = details_editor[0].formatUnicorn({
 			link_id: link_id,
-			checked_if_sfw: checked_if_sfw,
-			checked_if_not_vpn: checked_if_not_vpn
+			link_sfw: link_sfw,
+			link_vpn: link_vpn
 		}) + tagString +
 		details_editor[1] + projectString +
 		details_editor[2] + noteString + 
