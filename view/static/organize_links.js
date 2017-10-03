@@ -173,7 +173,10 @@ fetch(
 	}
 	return response.json();
 })
-.then(jsonData => json2table(jsonData))
+.then(function (jsonData) {
+	DATA = jsonData;
+	json2table(DATA);
+})
 .catch(err => console.log(err));
 
 u("tr")
