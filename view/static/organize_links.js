@@ -187,8 +187,9 @@ const CHUNK_SIZE = 10;
 let global_pageNum = 1;
 
 let getPage = function (pageNum) {
+	let url = BASE_URL + `/populate?chunkSize=$(CHUNK_SIZE)&pageNum=${pageNum}`;
 	fetch(
-		new Request(BASE_URL + `/populate?chunkSize=$(CHUNK_SIZE)&pageNum=${pageNum}`, {
+		new Request(url, {
 		method: 'GET',
 		mode: 'no-cors'
 	}))
@@ -199,12 +200,28 @@ let getPage = function (pageNum) {
 		return response.json();
 	})
 	.then(function (jsondata) {
-		data = jsondata;	// so that downloaded 'data' can be used later
+		// ensure that downloaded 'data' is available for later use
+		data = jsondata;
+		// delete the table
 		u(".pure-table > tbody").remove()
+		// TODO: delete any details thingy
+		// create tbody in the .master table.pure-table so dict2row can work
 		u(".pure-table").append("<tbody></tbody>")
+		// draw
 		json2table(data);
 	})
 	.catch(err => console.log(err));
+};
+
+let _draw = function () {
+	getPage(exact_page_num);
+	if (exact_page_num > global_pageNum) {
+		global_pageNum += 1;
+	} else if (exact_page_num < global_pageNum) {
+		global_pageNum -+ 1;
+	} else {
+		throw RuntimeError;
+	}
 };
 
 window.onload = (function () {
