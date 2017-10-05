@@ -23,6 +23,14 @@
 <content>
 
 	<div class="master">
+		% if not isThisFirstPage:
+			<a href="?pageNum={{ pageNum-1 }}">Previous</a>
+			<!-- call fetch with arg as pageNum  -->
+		% end
+		% if not isThisLastPage:
+			<a href="?pageNum={{ pageNum+1 }}">Next</a>
+			<!-- call fetch with arg as pageNum  -->
+		% end
 		<table class="pure-table">
 		<tbody>
 		<!-- JS will insert rows here -->
