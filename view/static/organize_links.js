@@ -183,11 +183,12 @@ let show_details = function(object) {
 // finally, the functions which execute as soon as the page is loaded---------
 
 let data = [];
+const CHUNK_SIZE = 10;
 let global_pageNum = 1;
 
 let getPage = function (pageNum) {
 	fetch(
-		new Request(BASE_URL + `/populate?pageNum=${pageNum}`, {
+		new Request(BASE_URL + `/populate?chunkSize=$(CHUNK_SIZE)&pageNum=${pageNum}`, {
 		method: 'GET',
 		mode: 'no-cors'
 	}))
@@ -210,6 +211,14 @@ window.onload = (function () {
 	// fetch-draw-store first 10
 	getPage(global_pageNum);
 	// draw nex button && previous button if pageNum !=1
+	if (global_pageNum === 1) {
+		draw_next(global_pageNum);
+	} else {
+		draw_prev(global_pageNum);
+		if (data.length === CHUNK_SIZE) {
+			draw_next(global_pageNum);
+		}
+	}
 	// ensure page number is properly incremented / decremented
 	global_pageNum += 1;
 	// activate button behaviour
