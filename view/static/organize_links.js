@@ -182,12 +182,40 @@ let show_details = function(object) {
 
 // finally, the functions which execute as soon as the page is loaded---------
 
-let data = [];
 const CHUNK_SIZE = 10;
-let global_pageNum = 1;
 
-let getPage = function (pageNum) {
-	let url = BASE_URL + `/populate?chunkSize=$(CHUNK_SIZE)&pageNum=${pageNum}`;
+let data = [];
+let prevPage = 0;
+let currPage = 1;
+
+let draw_nav = function (recvd_chunkSize) {
+	if (recvd_chunkSize === CHUNK_SIZE) {
+		// draw next button, onclick,incAll*PageBy1
+		u(".navi").append("<button class=next-page>Next</button>");
+		u(".next-page").on("click", function(e) {
+			prevPage += 1;
+			currPage += 1;
+			refreshPage();
+		});
+	};
+	if (prevPage > 0) {
+		// draw previous button, onclick,decAll*PageBy1
+		u(".navi").append("<button class=prev-page>Previous</button>");
+		u(".prev-page").on("click", function(e) {
+			prevPage -= 1;
+			currPage -= 1;
+			refreshPage();
+		});
+	};
+};
+
+let refreshPage = function () {
+	/**
+	 * always draws page according to value of global variable ``currPage``
+	 * its responsibilites include clearing old stuff, storing and drawing
+	 * newly recieved data and activating necessary interactions
+	 */
+	let url = BASE_URL + `/populate?chunkSize=$(CHUNK_SIZE)&pageNum=${currPage}`;
 	fetch(
 		new Request(url, {
 		method: 'GET',
@@ -202,42 +230,21 @@ let getPage = function (pageNum) {
 	.then(function (jsondata) {
 		// ensure that downloaded 'data' is available for later use
 		data = jsondata;
+		// delete all navigation buttons
+		u(".next-page").remove()
+		u(".prev-page").remove()
 		// delete the table
 		u(".pure-table > tbody").remove()
-		// TODO: delete any details thingy
+		// deletes any details thingy;; NOTE: copy of .details#clear_all
+		u(".expendable-body").remove();
+		// draw navigation buttons
+		draw_nav(data.length);
 		// create tbody in the .master table.pure-table so dict2row can work
 		u(".pure-table").append("<tbody></tbody>")
-		// draw
+		// draw table
 		json2table(data);
 	})
 	.catch(err => console.log(err));
-};
-
-let _draw = function () {
-	getPage(exact_page_num);
-	if (exact_page_num > global_pageNum) {
-		global_pageNum += 1;
-	} else if (exact_page_num < global_pageNum) {
-		global_pageNum -+ 1;
-	} else {
-		throw RuntimeError;
-	}
-};
-
-window.onload = (function () {
-	// fetch-draw-store first 10
-	getPage(global_pageNum);
-	// draw nex button && previous button if pageNum !=1
-	if (global_pageNum === 1) {
-		draw_next(global_pageNum);
-	} else {
-		draw_prev(global_pageNum);
-		if (data.length === CHUNK_SIZE) {
-			draw_next(global_pageNum);
-		}
-	}
-	// ensure page number is properly incremented / decremented
-	global_pageNum += 1;
 	// activate button behaviour
 	u("tr")
 	.on("mouseover", function(e) {
@@ -255,5 +262,10 @@ window.onload = (function () {
 		object = data[index];
 		show_details(object);
 	});
+};
+
+window.onload = (function () {
+	// fetch-draw-store first 10
+	refreshPage();
 })();
 
