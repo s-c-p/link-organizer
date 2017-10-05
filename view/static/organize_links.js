@@ -183,37 +183,51 @@ let show_details = function(object) {
 // finally, the functions which execute as soon as the page is loaded---------
 
 let data = [];
+let global_pageNum = 1;
 
-fetch(
-	new Request(BASE_URL + "/populate", {
-	method: 'GET',
-	mode: 'no-cors'
-}))
-.then(function (response) {
-	if (!response.ok) {
-		throw response.statusText
-	}
-	return response.json();
-})
-.then(function (jsondata) {
-	data = jsondata;	// so that downloaded 'data' can be used later
-	json2table(data);
-})
-.catch(err => console.log(err));
+let getPage = function (pageNum) {
+	fetch(
+		new Request(BASE_URL + `/populate?pageNum=${pageNum}`, {
+		method: 'GET',
+		mode: 'no-cors'
+	}))
+	.then(function (response) {
+		if (!response.ok) {
+			throw response.statusText
+		}
+		return response.json();
+	})
+	.then(function (jsondata) {
+		data = jsondata;	// so that downloaded 'data' can be used later
+		u(".pure-table > tbody").remove()
+		u(".pure-table").append("<tbody></tbody>")
+		json2table(data);
+	})
+	.catch(err => console.log(err));
+};
 
-u("tr")
-.on("mouseover", function(e) {
-	u(e.currentTarget).attr("style", "background-color: #2ecc71;")
-})
-.on("mouseout", function(e) {
-	u(e.currentTarget).attr("style", 'background-color: "";')
-})
-.on("click", function(e) {
-	// find it first
-	html_id = u(e.currentTarget).attr("id");
-	// ``findIndex`` is better than ``filter``, because the later would scan
-	// the whole array even after a match was found, thus wasting time,money
-	index = data.findIndex(function (dict) { return dict.id===html_id });
-	object = data[index];
-	show_details(object);
-});
+window.onload = (function () {
+	// fetch-draw-store first 10
+	getPage(global_pageNum);
+	// draw nex button && previous button if pageNum !=1
+	// ensure page number is properly incremented / decremented
+	global_pageNum += 1;
+	// activate button behaviour
+	u("tr")
+	.on("mouseover", function(e) {
+		u(e.currentTarget).attr("style", "background-color: #2ecc71;")
+	})
+	.on("mouseout", function(e) {
+		u(e.currentTarget).attr("style", 'background-color: "";')
+	})
+	.on("click", function(e) {
+		// find it first
+		html_id = u(e.currentTarget).attr("id");
+		// ``findIndex`` is better than ``filter``, because the later would scan
+		// the whole array even after a match was found, thus wasting time,money
+		index = data.findIndex(function (dict) { return dict.id===html_id });
+		object = data[index];
+		show_details(object);
+	});
+})();
+
