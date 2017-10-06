@@ -1,3 +1,9 @@
+const CHUNK_SIZE = 10;
+const BASE_URL = "http://127.0.0.1:8080";
+
+let data = [];
+let currPage = 1;
+
 // borrowed from outer world -------------------------------------------------
 
 String.prototype.formatUnicorn = String.prototype.formatUnicorn ||
@@ -179,18 +185,11 @@ let show_details = function(object) {
 	});
 };
 
-// finally, the functions which execute as soon as the page is loaded---------
-
-const CHUNK_SIZE = 10;
-
-let data = [];
-let BASE_URL = "http://127.0.0.1:8080";
-let currPage = 1;
-
 /**
  * required by ``refreshPage`` to draw next and previous buttons as needed
  * @param {int} recvd_chunkSize, is the length of data array recieved from
  *              server
+ * NOTE: this function modifies a Global variable ``currPage``
  */
 let draw_nav = function (recvd_chunkSize) {
 	// if recvd is less than what was requested => data has ended
@@ -221,6 +220,8 @@ let draw_nav = function (recvd_chunkSize) {
  * draws page according to value of ``currPage``
  * its responsibilites include clearing old stuff, storing and drawing
  * newly recieved data and activating necessary interactions
+ * 
+ * NOTE: this function modifies a Global variable ``data``
  */
 let refreshPage = function (page_num) {
 	let url = BASE_URL + `/populate?chunkSize=$(CHUNK_SIZE)&pageNum=${page_num}`;
@@ -272,8 +273,7 @@ let refreshPage = function (page_num) {
 	});
 };
 
-window.onload = (function () {
-	// fetch-draw-store first 10
-	refreshPage();
-})();
+// finally, the functions which execute as soon as the page is loaded---------
+
+refreshPage(currPage);
 
