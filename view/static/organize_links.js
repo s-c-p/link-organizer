@@ -23,8 +23,8 @@ function () {
 let details_editor = [];
 details_editor.push(
 '<div id="{link_id}" class=expendable-body>' +
-'<input id=clear_all type=button name=clear_all>' +
-'<input id=save_details type=submit name=save_details>' +
+'<button id=clear_all> Clear All </button>' +
+'<button id=save_details> Submit </button>' +
 '<div id=link_details>' +
 '	<input id=sfw  name=sfw type=checkbox {link_sfw}>' +
 '	<label for=sfw>is this link Safe For Workplace</label>' +
