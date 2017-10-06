@@ -6,9 +6,18 @@ let currPage = 1;
 
 // borrowed from outer world -------------------------------------------------
 
+/**
+ * formatUnicorn copy-pasted shamelessly directly from:
+ *   stackoverflow.com/q/610406/
+ * this function makes the string behave like python's
+ * awesome ``{}`` string  thingys; e.g.
+ *   ans = "My name is {0} I am a {1}".formatUnicorn('ally', 'girl')
+ *
+ * this is needed when component variables are not yet ready, as in
+ * templates which can be used later when variables get values
+ */
 String.prototype.formatUnicorn = String.prototype.formatUnicorn ||
 function () {
-	// stackoverflow.com/q/610406/
 	"use strict";
 	var str = this.toString();
 	if (arguments.length) {
@@ -193,11 +202,11 @@ let show_details = function(object) {
  */
 let draw_nav = function (recvd_chunkSize) {
 	// if recvd is less than what was requested => data has ended
-	// however this 'thingy' has one weakness, it will show next
-	// button even when there is no more data IFF length of entire
+	// however this 'logic' has one weakness, it will show next
+	// button even when there is no more data in case length of entire
 	// data (in server) is a integer multiple of CHUNK_SIZE
 	if (recvd_chunkSize === CHUNK_SIZE) {
-		// draw next button, onclick,incAll*PageBy1
+		// draw next button
 		u(".navi").append("<button class=next-page>Next</button>");
 		// define what to do on click of Next button
 		u(".next-page").on("click", function(e) {
@@ -206,7 +215,7 @@ let draw_nav = function (recvd_chunkSize) {
 		});
 	};
 	if (currPage > 1) {
-		// draw previous button, onclick,decAll*PageBy1
+		// draw previous button
 		u(".navi").append("<button class=prev-page>Previous</button>");
 		// define what to do on click of Previous button
 		u(".prev-page").on("click", function(e) {
@@ -250,7 +259,7 @@ let refreshPage = function (page_num) {
 		draw_nav(data.length);
 		// create tbody in the .master table.pure-table so dict2row can work
 		u(".pure-table").append("<tbody></tbody>")
-		// draw table
+		// fill table with rows made up of details contained in data
 		json2table(data);
 	})
 	.catch(err => console.log(err));
