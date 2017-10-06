@@ -1,5 +1,3 @@
-let BASE_URL = "http://127.0.0.1:8080";
-
 // borrowed from outer world -------------------------------------------------
 
 String.prototype.formatUnicorn = String.prototype.formatUnicorn ||
@@ -103,8 +101,8 @@ let show_details = function(object) {
 	};
 	// delete if findin was successful without any errors
 	u(".expendable-body").remove();
-	// build the final
-	final = details_editor[0].formatUnicorn({
+	// build the entire html string to be put inside div.detail
+	let final = details_editor[0].formatUnicorn({
 			link_id: link_id,
 			link_sfw: link_sfw,
 			link_vpn: link_vpn
@@ -112,7 +110,7 @@ let show_details = function(object) {
 		details_editor[1] + projectString +
 		details_editor[2] + noteString + 
 		details_editor[3];
-	// draw
+	// actually draw the dom to display details
 	u("div.detail").append(final);
 	// activate input region
 	u(".common-input").on("keydown", function (e) {
@@ -147,7 +145,7 @@ let show_details = function(object) {
 	u("#clear_all").on("click", function (e) {
 		u(".expendable-body").remove();
 	});
-	// activate submit
+	// activate submit button
 	u("#save_details").on("click", function (e) {
 		let i = 0;
 		let ans = {};	// as opposed to Object(), best practice
@@ -172,7 +170,8 @@ let show_details = function(object) {
 		// TODO: change this
 		console.log(ans);
 	});
-	// activate delete button, bit.ly/2k4OWFf
+	// activate delete-on-hoverNclick behaviour
+	// for all tags, projects and notes. See bit.ly/2k4OWFf
 	u("li[class^=a-]").on("click", function (e) {
 		// the looks part i.e. show delete button on hover
 		// is handled by CSS
@@ -185,37 +184,46 @@ let show_details = function(object) {
 const CHUNK_SIZE = 10;
 
 let data = [];
-let prevPage = 0;
+let BASE_URL = "http://127.0.0.1:8080";
 let currPage = 1;
 
+/**
+ * required by ``refreshPage`` to draw next and previous buttons as needed
+ * @param {int} recvd_chunkSize, is the length of data array recieved from
+ *              server
+ */
 let draw_nav = function (recvd_chunkSize) {
+	// if recvd is less than what was requested => data has ended
+	// however this 'thingy' has one weakness, it will show next
+	// button even when there is no more data IFF length of entire
+	// data (in server) is a integer multiple of CHUNK_SIZE
 	if (recvd_chunkSize === CHUNK_SIZE) {
 		// draw next button, onclick,incAll*PageBy1
 		u(".navi").append("<button class=next-page>Next</button>");
+		// define what to do on click of Next button
 		u(".next-page").on("click", function(e) {
-			prevPage += 1;
 			currPage += 1;
-			refreshPage();
+			refreshPage(currPage);
 		});
 	};
-	if (prevPage > 0) {
+	if (currPage > 1) {
 		// draw previous button, onclick,decAll*PageBy1
 		u(".navi").append("<button class=prev-page>Previous</button>");
+		// define what to do on click of Previous button
 		u(".prev-page").on("click", function(e) {
-			prevPage -= 1;
 			currPage -= 1;
-			refreshPage();
+			refreshPage(currPage);
 		});
 	};
 };
 
-let refreshPage = function () {
-	/**
-	 * always draws page according to value of global variable ``currPage``
-	 * its responsibilites include clearing old stuff, storing and drawing
-	 * newly recieved data and activating necessary interactions
-	 */
-	let url = BASE_URL + `/populate?chunkSize=$(CHUNK_SIZE)&pageNum=${currPage}`;
+/**
+ * draws page according to value of ``currPage``
+ * its responsibilites include clearing old stuff, storing and drawing
+ * newly recieved data and activating necessary interactions
+ */
+let refreshPage = function (page_num) {
+	let url = BASE_URL + `/populate?chunkSize=$(CHUNK_SIZE)&pageNum=${page_num}`;
 	fetch(
 		new Request(url, {
 		method: 'GET',
