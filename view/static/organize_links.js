@@ -1,4 +1,4 @@
-const CHUNK_SIZE = 10;
+const CHUNK_SIZE = 10; // user_pref.chunk_size
 const BASE_URL = "http://127.0.0.1:8080";
 
 let data = [];
@@ -70,12 +70,20 @@ details_editor.push(
 /**
  * takes a JS object and draws a clickable row, form the single-y function to
  * be used with json2table as-in Array.map
+ * This function ensure that you don't end up visiting vpn/~sfw links.
+ * TODO: implemet send-to-cache(dict)
  * @param {*object} dict a js object containing all details related to a link
  */
 let dict2row = function (dict) {
-	code = `
+	let url = dict.url;
+	if (user_pref.vigilant === true) {
+		if (dict.vpn || !dict.sfw) {
+			url = "";
+		}
+	}
+	let code = `
 		<tr id="${dict.id}">
-			<td>    <a href="${dict.url}">${dict.title}</a>    </td>
+			<td>    <a href="${url}">${dict.title}</a>    </td>
 		</tr>
 	`;
 	u("table > tbody:last-child").append(code);
