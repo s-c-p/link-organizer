@@ -1,5 +1,5 @@
 when	I login, I should see
-		- header, showing me buttons to See Cached links, go to Settings page
+		- header region, showing <<See Cached links>>, go to <<Settings>> page
 		  and Log Out
 		- a full width spanning things that has 4 label like, clickable,
 		  boxes, showing:
