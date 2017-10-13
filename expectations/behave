@@ -34,7 +34,7 @@ when	I land at the see cached links page, I should see
 ------------------------------------------------------------------------------
 
 [[Settings]]
-!(this file is located at-- $proj_home/view/index.tpl)
+!(this file is located at-- $proj_home/view/static/settings.tpl)
 
 when	I visit settings page, I should see option to
 			- set no-warn mode for NSFW links
