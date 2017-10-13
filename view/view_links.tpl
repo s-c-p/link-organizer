@@ -1,11 +1,3 @@
-<!--
-	a nice fat header dedicated for searching
-	below the header there is a paginated table, looking like
-	Link(active/prompt/inactive)	tag-list-preview	project-list-preview
-		prompt   ==> for !sfw links IFF familyMode==ON
-		inactive ==> for vpn-required==true
-		active	 ==> for every other links
-	Also, the preview thingy is habdled entirely by CSS
 -->
 
 <!DOCTYPE html>
