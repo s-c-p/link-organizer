@@ -1,5 +1,6 @@
 to denote                |    symbolism
 -------------------------+---------------------
-button                   |    <<button name>>
-page                     |    [[page's title]]
-fillable area            |    __placeholder__
+button                   |    <<button name>>,  INLINE
+page name                |    [[page's title]], BLOCK, ends with 79 '-'s
+fillable area            |    __placeholder__,  INLINE
+

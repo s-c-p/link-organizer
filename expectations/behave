@@ -1,14 +1,46 @@
+[[Welcome to Link Organizer]]
+!(this file is located at-- $proj_home/view/index.tpl)
+
 when	I login, I should see
 		- header region, showing <<See Cached links>>, go to <<Settings>> page
-		  and Log Out
-		- a full width spanning things that has 4 label like, clickable,
+		  and <<Log Out>>
+		- a full width spanning thing that has 4 label like, clickable,
 		  boxes, showing:
-			- links sorted
-			- links to be sorted
-			- error links
-			- import new links file
+			- <<links sorted>>
+			- <<links to be sorted>>
+			- <<error links>>
+			- <<import new links file>>
 		- a tag and a project cloud or something sexy like -- network of
 		  projects and tags interrelations
+
+------------------------------------------------------------------------------
+
+[[See Cached Links]]
+!(this is generated on the fly, thanks to IndexDB of browsers and template is
+  stored inside the index.tpl file itself)
+
+when	I land at the see cached links page, I should see
+		- two codeblocks, each having one truly clickable link against
+
+------------------------------------------------------------------------------
+
+[[Settings]]
+
+------------------------------------------------------------------------------
+
+[[Sorted Links]]
+
+------------------------------------------------------------------------------
+
+[[Links to be Sorted]]
+
+------------------------------------------------------------------------------
+
+[[Error-ed Links]]
+
+------------------------------------------------------------------------------
+
+[[Import Links]]
 
 ------------------------------------------------------------------------------
 
