@@ -63,10 +63,44 @@ when	I visit sorted links page, I should see
 ------------------------------------------------------------------------------
 
 [[Links to be Sorted]]
+!(this file is located at-- $proj_home/view/organizer.tpl)
+
+given	that the user clicks on <<organize links>>
+then	he is taken to [[Select Import Session]] page to select which
+		import s/he wants to organize, by default the imports which have links
+		awaiting organization appear in reverse-chronological order with the
+		first link pointing to the import which was being worked upon the last
+		time
+		- links appear as blocks, each block is clickable and show size of
+		  file, sort-remaining/initial-links and computer details
+when	the user selects an ``import session``, the app should remember this
+		info in ``user-land``, until either
+			all links are sorted
+			user logs out and imports a new file on next-login
+		now, that import session is known globally (in user-land) use it
+		and present the real link organizer page
+
+!(this file is located at-- $proj_home/view/organizer.tpl)
+when	I visit organize links page, I should see a master-detail view
+		(TODO: which UI framework for mobile displays?)
+		- ``master`` pane takes larger area and shows a table of links
+		- ``details`` pane takes smaller area and shows, well, details of
+		  the link selected by clicking
+		the details area is where the user can edit the details associated
+		with a link, as soon as a link has even one tag/project associated
+		with it, it gets categorized as ``organized`` and falls out of the
+		``Un-Organized`` category
 
 ------------------------------------------------------------------------------
 
 [[Error-ed Links]]
+
+description
+		a link which was organized but eventually lost all tags && projects
+		is now, like a, zombie in links database
+		or a link which no-longer exists on the web
+		or a link that could not be parsed properly (as in ``about:`` links of
+		  firefox or ``chrome:`` links of chromium based browsers)
 
 ------------------------------------------------------------------------------
 
