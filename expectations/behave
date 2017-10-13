@@ -48,7 +48,7 @@ when	I visit settings page, I should see option to
 ------------------------------------------------------------------------------
 
 [[Sorted Links]]
-!(this file is located at-- $proj_home/view/)
+!(this file is located at-- $proj_home/view/static/view_links.html)
 
 when	I visit sorted links page, I should see
 		- a nice fat header dedicated for searching
