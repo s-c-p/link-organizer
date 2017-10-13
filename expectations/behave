@@ -2,7 +2,7 @@
 !(this file is located at-- $proj_home/view/index.tpl)
 
 when	I login, I should see
-		- header region, showing <<See Cached links>>, go to <<Settings>> page
+		- header region, showing <<See Cached Links>>, go to <<Settings>> page
 		  and <<Log Out>>
 		- a full width spanning thing that has 4 label like, clickable,
 		  boxes, showing:
@@ -12,6 +12,9 @@ when	I login, I should see
 			- <<import new links file>>
 		- a tag and a project cloud or something sexy like -- network of
 		  projects and tags interrelations
+	
+	NOTE: during initial development, it is assumed that sign in auth has
+	been successful
 
 ------------------------------------------------------------------------------
 
@@ -20,11 +23,26 @@ when	I login, I should see
   stored inside the index.tpl file itself)
 
 when	I land at the see cached links page, I should see
-		- two codeblocks, each having one truly clickable link against
+		- two codeblocks, each line having one truly clickable link against
+		  line-number, the codeblocks
+			- left one has slight red bg, and contains links that are nsfw
+			- right one has slight blue bg, and contains links that are
+			  snowden
+		  NOTE: that if a link is both nsfw and snowden, then it goes to
+		  		bottom of right codeblock
 
 ------------------------------------------------------------------------------
 
 [[Settings]]
+!(this file is located at-- $proj_home/view/index.tpl)
+
+when	I visit settings page, I should see option to
+			- set no-warn mode for NSFW links
+			- set no-warn mode for SNOWDEN links
+			- set __chunk-size__ for __pages__!(a drop-down list)
+			- set new password, __current-password__, __new-password__, __again__
+		and the page ends with a nice <<save settings>> button
+		in future, update settings to server as soon as UI changes are made
 
 ------------------------------------------------------------------------------
 
