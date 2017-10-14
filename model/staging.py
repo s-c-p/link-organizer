@@ -44,8 +44,8 @@ class Link(object):
 		self.import_ = import_
 		return
 
-	def save(self):
-		""" save itself in the database and return the reference key """
+	def create(self):
+		""" create itself in the database and return the reference key """
 		# search `sqlite3 namedtuple` and look at 
 		# peter-hoffmann.com/2010/python-sqlite-namedtuple-factory.html
 		with sqliteDB(dbFile) as cur:
@@ -62,7 +62,7 @@ class Link(object):
 		return linkID
 
 	@staticmethod
-	def getDetailsByURL(self, url):
+	def read(self, url):
 		""" fetch all information from DB of a link based solely on any
 		arbitrary url and not bound by the instance/object on which it is
 		called and hence this is a ``staticmethod``
@@ -269,11 +269,11 @@ def stage(file_path, raw_data):
 		# derive it for the sake of DRY
 		base_intel = basicIntel(clean_data, bkmk_title, context)
 		try:
-			new_linkID = clean_data.save()
+			new_linkID = clean_data.create()
 		except sqlite3.IntegrityError:
 			# => url already exists, time to increase intel
 			newData = clean_data
-			existing_linkID, oldData = Link.getDetailsByURL(newData.url)
+			existing_linkID, oldData = Link.read(newData.url)
 			final, diff_intel = advancedIntel(oldData, newData)
 			# NOTE: newData.import_ == oldData.import_ will never happen under
 			# normal flow of control
