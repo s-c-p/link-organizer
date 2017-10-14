@@ -96,11 +96,12 @@ when	I visit organize links page, I should see a master-detail view
 [[Error-ed Links]]
 
 description
-		a link which was organized but eventually lost all tags && projects
-		is now, like a, zombie in links database
-		or a link which no-longer exists on the web
-		or a link that could not be parsed properly (as in ``about:`` links of
-		  firefox or ``chrome:`` links of chromium based browsers)
+		- a link which was organized but at some point of time in future
+		  looses all tags && projects AND is now, like a, zombie in links
+		  database
+		- or a link which no-longer exists on the web
+		- or a link that could not be parsed properly (as in ``about:`` links
+		  of firefox or ``chrome:`` links of chromium based browsers)
 
 ------------------------------------------------------------------------------
 

@@ -50,9 +50,9 @@ class Link(object):
 		# peter-hoffmann.com/2010/python-sqlite-namedtuple-factory.html
 		with sqliteDB(dbFile) as cur:
 			cur.execute(
-				"INSERT INTO links "						\
-				"(url, title, snowden, safeForWork, "		\
-				"date_created, state_id, import_id) "		\
+				"INSERT INTO links "                  \
+				"(url, title, snowden, safeForWork, " \
+				"date_created, state_id, import_id) " \
 				"VALUES (?,?,?,?,?,?,?)",
 				[self.url, self.title, self.snowden, self.safeForWork,
 				self.date_created, utlty_deENUMfunc(self.state_),
@@ -195,7 +195,7 @@ def advancedIntel(oldData, newData):
 	state_id
 		doesn't matter; if both are , new is `staging` old is `organized`
 	import_id
-		HAS TO BE DIFFERENT, => 
+		HAS TO BE DIFFERENT, =>
 	"""
 	final = newData
 	info4intel = list()
