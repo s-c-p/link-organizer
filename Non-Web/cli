@@ -1,0 +1,6 @@
+bm save bookmarks.html
+    prefrably password less
+    aes256 encrypted using openssl -base64
+    returns either
+        successfully uploaded
+        upload failed
