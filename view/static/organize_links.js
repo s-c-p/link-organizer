@@ -70,7 +70,7 @@ details_editor.push(
 /**
  * takes a JS object and draws a clickable row, form the single-y function to
  * be used with json2table as-in Array.map
- * This function ensure that you don't end up visiting vpn/~sfw links.
+ * This function ensure that you don't end up visiting vpn/!sfw links.
  * TODO: implemet send-to-cache(dict)
  * @param {*object} dict a js object containing all details related to a link
  */
