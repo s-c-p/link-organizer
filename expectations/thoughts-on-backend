@@ -1,0 +1,12 @@
+For implementing login, we need: 
+
+table users
+	id username salt PBKDF2(password+salt)
+table session_store
+	id FK_user_id apparent_IP cookie_value_for_this_session
+accompained by login.py
+	ensure thrawting off of brute-force logins
+	ensure thrawting of naughty cookie logins
+
+
+
