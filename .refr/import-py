@@ -1,0 +1,4 @@
+import-manager.py
+	if firstline.lower() == "<!doctype netscape-bookmark-file-1>":
+		file is exported by a standard browser
+-------------------------------------------------------------------------
