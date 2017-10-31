@@ -109,3 +109,10 @@ description
 
 ------------------------------------------------------------------------------
 
+glance
+	cal at bottom each day labeled by the most popular tag of that day
+general links view
+	master-detail, with vertical timeline in master and details in, well,
+	detail. The controls and stuff thats on the details pane are subject
+	to change based on view
+
