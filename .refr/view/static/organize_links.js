@@ -7,7 +7,7 @@ let currPage = 1;
 // borrowed from outer world -------------------------------------------------
 
 /**
- * formatUnicorn copy-pasted shamelessly directly from:
+ * formatUnicorn copy-pasted shamelessly from:
  *   stackoverflow.com/q/610406/
  * this function makes the string behave like python's
  * awesome ``{}`` string  thingys; e.g.
@@ -45,7 +45,9 @@ details_editor.push(
 '	<label for=sfw>is this link Safe For Workplace</label>' +
 '	<br>' +
 '	<input id=vpn  name=vpn type=checkbox {link_vpn}>' +
-'	<label for=vpn>should this link be hidden from ISP and other watchers?</label>' +
+'	<label for=vpn>' +
+'		should this link be hidden from ISP and other watchers?' +
+'	</label>' +
 '	<div class=labels>' +
 '		<ul class=tags>'
 );			// <li class=a-tag>${}</li>
@@ -56,7 +58,8 @@ details_editor.push(
 details_editor.push(
 '		</ul>' +
 '	</div>' +
-'	<input class=common-input type=text name=user_input placeholder="#tag @project notes">' +
+'	<input class=common-input type=text name=user_input' +
+'	 placeholder="#tag @project notes">' +
 '	<ul class=notes>'
 );			// <li class=a-note>${}</li>
 details_editor.push(
@@ -241,7 +244,8 @@ let draw_nav = function (recvd_chunkSize) {
  * NOTE: this function modifies a Global variable ``data``
  */
 let refreshPage = function (page_num) {
-	let url = BASE_URL + `/populate?chunkSize=$(CHUNK_SIZE)&pageNum=${page_num}`;
+	let url = BASE_URL +
+			`/populate?chunkSize=$(CHUNK_SIZE)&pageNum=${page_num}`;
 	fetch(
 		new Request(url, {
 		method: 'GET',
